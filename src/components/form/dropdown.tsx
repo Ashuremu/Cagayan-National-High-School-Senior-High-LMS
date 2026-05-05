@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import type { Key } from 'react';
 import { Select, SelectItem } from '@heroui/select';
 
 export interface DropdownOption {
@@ -38,10 +38,11 @@ export default function Dropdown({
       )}
       <Select
         selectedKeys={value ? new Set([value]) : new Set()}
-        onSelectionChange={(keys) => {
-          const selected = Array.from(keys as Set<string>)[0];
+        onSelectionChange={(keys: 'all' | Set<Key>) => {
+          if (keys === 'all') return;
+          const selected = Array.from(keys)[0];
           if (!selected) return;
-          onChange(selected);
+          onChange(String(selected));
         }}
         size={size}
         variant={variant}

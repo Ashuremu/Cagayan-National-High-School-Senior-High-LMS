@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import type { ChangeEvent } from 'react';
 import { Input } from '@heroui/input';
 
 export interface DatePickerProps {
@@ -38,7 +38,7 @@ export default function DatePicker({
         type="date"
         placeholder={placeholder}
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e: ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
         size="sm"
         variant="bordered"
         min={min}

@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import type { ChangeEvent } from 'react';
 import { Input } from '@heroui/input';
 
 export interface SearchProps {
@@ -36,7 +36,7 @@ export default function Search({
         type="text"
         placeholder={placeholder}
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e: ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
         size="sm"
         variant="bordered"
         isDisabled={disabled}

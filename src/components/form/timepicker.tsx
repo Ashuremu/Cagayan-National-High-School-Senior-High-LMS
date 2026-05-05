@@ -1,4 +1,4 @@
-import React from 'react';
+import type { ChangeEvent } from 'react';
 import { Input as HeroInput } from '@heroui/input';
 
 export interface TimePickerProps {
@@ -36,7 +36,7 @@ export default function TimePicker({
         type="time"
         placeholder={placeholder}
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e: ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
         size="sm"
         variant="bordered"
         isDisabled={disabled}

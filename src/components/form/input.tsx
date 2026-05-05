@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import type { ChangeEvent, ReactNode } from 'react';
 import { Input as HeroInput } from '@heroui/input';
 
 export interface InputProps {
@@ -14,8 +14,8 @@ export interface InputProps {
   required?: boolean;
   disabled?: boolean;
   error?: string;
-  startContent?: React.ReactNode;
-  endContent?: React.ReactNode;
+  startContent?: ReactNode;
+  endContent?: ReactNode;
 }
 
 export default function Input({
@@ -44,7 +44,7 @@ export default function Input({
         type={type}
         placeholder={placeholder}
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e: ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
         size="sm"
         variant="bordered"
         isDisabled={disabled}

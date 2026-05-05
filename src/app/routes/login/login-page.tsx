@@ -4,6 +4,8 @@ import { HighlightCard, HighlightGrid } from '../../../components'
 import Modal from '../../../components/Modal'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { loginWithBackend } from './server/login-api'
+import { getLandingPathForRole } from '../role-landing'
 
 const highlights = [
   { title: 'Easy Access to Learning Materials', icon: '📖' },
@@ -49,6 +51,8 @@ export const LoginPage = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
   const navigate = useNavigate()
 
   const handleUseMockCredentials = (mockEmail: string, mockPassword: string) => {
@@ -56,10 +60,27 @@ export const LoginPage = () => {
     setPassword(mockPassword)
   }
 
-  const handleLoginSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleLoginSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (!email.trim() || !password.trim()) return
-    navigate('/student')
+
+    setErrorMessage('')
+    setIsSubmitting(true)
+
+    try {
+      const result = await loginWithBackend({ email, password })
+      if (!result.ok) {
+        setErrorMessage((result as { error: { message: string } }).error.message)
+        return
+      }
+
+      setIsLoginModalOpen(false)
+      navigate(getLandingPathForRole(result.data.user.role))
+    } catch {
+      setErrorMessage('Cannot connect to server. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -143,9 +164,14 @@ export const LoginPage = () => {
               <span>Forgot Password?</span>
             </label>
 
-            <button type="submit" className="login-modal-submit">
-              Login
+            <button type="submit" className="login-modal-submit" disabled={isSubmitting}>
+              {isSubmitting ? 'Logging in...' : 'Login'}
             </button>
+            {errorMessage ? (
+              <p role="alert" style={{ color: '#b91c1c', margin: 0 }}>
+                {errorMessage}
+              </p>
+            ) : null}
           </form>
 
           <section className="mock-credentials" aria-label="Mock login credentials">

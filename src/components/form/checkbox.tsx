@@ -1,12 +1,12 @@
 'use client';
 
-import React from 'react';
+import type { ReactNode } from 'react';
 import { Checkbox as HeroCheckbox } from '@heroui/checkbox';
 
 export interface CheckboxProps {
   isSelected?: boolean;
   onValueChange: (checked: boolean) => void;
-  children?: React.ReactNode;
+  children?: ReactNode;
   label?: string;
   description?: string;
   className?: string;
