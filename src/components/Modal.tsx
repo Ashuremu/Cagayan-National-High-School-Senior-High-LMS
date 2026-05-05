@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
-import { Button } from '@heroui/button';
 
 interface ModalProps {
   isOpen: boolean;
@@ -54,7 +53,7 @@ export default function Modal({
     };
   }, [isOpen, onClose]);
 
-  const handleBackdropClick = (event: MouseEvent<HTMLDivElement>) => {
+  const handleBackdropClick = (event: React.MouseEvent<HTMLDivElement>) => {
     if (closeOnBackdropClick && event.target === event.currentTarget) {
       onClose();
     }
@@ -103,9 +102,8 @@ export default function Modal({
                 )}
               </div>
               {showCloseButton && (
-                <Button
-                  isIconOnly
-                  variant="light"
+                <button
+                  type="button"
                   onClick={onClose}
                   className="ml-4 p-1 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
                   aria-label="Close modal"
@@ -123,7 +121,7 @@ export default function Modal({
                       d="M6 18L18 6M6 6l12 12"
                     />
                   </svg>
-                </Button>
+                </button>
               )}
             </div>
           )}
@@ -161,9 +159,8 @@ export function ModalHeader({
         )}
       </div>
       {showCloseButton && onClose && (
-        <Button
-          isIconOnly
-          variant="light"
+        <button
+          type="button"
           onClick={onClose}
           className="ml-4 p-1 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
           aria-label="Close modal"
@@ -181,7 +178,7 @@ export function ModalHeader({
               d="M6 18L18 6M6 6l12 12"
             />
           </svg>
-        </Button>
+        </button>
       )}
     </div>
   );

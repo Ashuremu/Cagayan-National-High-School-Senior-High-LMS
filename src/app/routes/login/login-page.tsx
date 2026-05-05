@@ -1,6 +1,8 @@
 import logo from '../../../assets/logo.png'
 import SDO from '../../../assets/SDO.png'
 import { HighlightCard, HighlightGrid } from '../../../components'
+import Modal from '../../../components/Modal'
+import { useState } from 'react'
 
 const highlights = [
   { title: 'Easy Access to Learning Materials', icon: '📖' },
@@ -10,6 +12,8 @@ const highlights = [
 ]
 
 export const LoginPage = () => {
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
+
   return (
     <div className="login-page">
       <header className="login-header">
@@ -22,7 +26,11 @@ export const LoginPage = () => {
           <a href="/">About</a>
           <a href="/">Helpdesk</a>
           <a href="/">FAQs</a>
-          <button type="button" className="login-btn">
+          <button
+            type="button"
+            className="login-btn"
+            onClick={() => setIsLoginModalOpen(true)}
+          >
             Login
           </button>
         </nav>
@@ -46,6 +54,41 @@ export const LoginPage = () => {
           ))}
         </HighlightGrid>
       </main>
+
+      <Modal
+        isOpen={isLoginModalOpen}
+        onClose={() => setIsLoginModalOpen(false)}
+        size="lg"
+        showCloseButton={false}
+        className="login-modal"
+      >
+        <div className="login-modal-content">
+          <button
+            type="button"
+            onClick={() => setIsLoginModalOpen(false)}
+            className="login-modal-close"
+            aria-label="Close login modal"
+          >
+            ×
+          </button>
+
+          <h2 className="login-modal-title">Welcome</h2>
+
+          <form className="login-modal-form">
+            <input type="email" placeholder="Email" aria-label="Email" />
+            <input type="password" placeholder="Password" aria-label="Password" />
+
+            <label className="login-modal-forgot">
+              <input type="checkbox" />
+              <span>Forgot Password?</span>
+            </label>
+
+            <button type="submit" className="login-modal-submit">
+              Login
+            </button>
+          </form>
+        </div>
+      </Modal>
     </div>
   )
 }
