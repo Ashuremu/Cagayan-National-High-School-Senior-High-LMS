@@ -3,6 +3,7 @@ import SDO from '../../../assets/SDO.png'
 import { HighlightCard, HighlightGrid } from '../../../components'
 import Modal from '../../../components/Modal'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const highlights = [
   { title: 'Easy Access to Learning Materials', icon: '📖' },
@@ -11,8 +12,55 @@ const highlights = [
   { title: 'Secure and Reliable Access', icon: '🛡️' },
 ]
 
+const mockCredentials = [
+  {
+    role: 'Student',
+    email: 'student@cnhs-lms.test',
+    password: 'Student123!',
+  },
+  {
+    role: 'Parent',
+    email: 'parent@cnhs-lms.test',
+    password: 'Parent123!',
+  },
+  {
+    role: 'Teacher',
+    email: 'teacher@cnhs-lms.test',
+    password: 'Teacher123!',
+  },
+  {
+    role: 'Coordinator',
+    email: 'coordinator@cnhs-lms.test',
+    password: 'Coord123!',
+  },
+  {
+    role: 'IT Admin',
+    email: 'itadmin@cnhs-lms.test',
+    password: 'ITAdmin123!',
+  },
+  {
+    role: 'Principal',
+    email: 'principal@cnhs-lms.test',
+    password: 'Principal123!',
+  },
+]
+
 export const LoginPage = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const navigate = useNavigate()
+
+  const handleUseMockCredentials = (mockEmail: string, mockPassword: string) => {
+    setEmail(mockEmail)
+    setPassword(mockPassword)
+  }
+
+  const handleLoginSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    if (!email.trim() || !password.trim()) return
+    navigate('/student')
+  }
 
   return (
     <div className="login-page">
@@ -74,9 +122,21 @@ export const LoginPage = () => {
 
           <h2 className="login-modal-title">Welcome</h2>
 
-          <form className="login-modal-form">
-            <input type="email" placeholder="Email" aria-label="Email" />
-            <input type="password" placeholder="Password" aria-label="Password" />
+          <form className="login-modal-form" onSubmit={handleLoginSubmit}>
+            <input
+              type="email"
+              placeholder="Email"
+              aria-label="Email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              aria-label="Password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+            />
 
             <label className="login-modal-forgot">
               <input type="checkbox" />
@@ -87,6 +147,29 @@ export const LoginPage = () => {
               Login
             </button>
           </form>
+
+          <section className="mock-credentials" aria-label="Mock login credentials">
+            <h3>Mock Credentials For Testing</h3>
+            <ul>
+              {mockCredentials.map((credential) => (
+                <li key={credential.role}>
+                  <div>
+                    <strong>{credential.role}</strong>
+                    <span>{credential.email}</span>
+                    <span>{credential.password}</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleUseMockCredentials(credential.email, credential.password)
+                    }
+                  >
+                    Use
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </section>
         </div>
       </Modal>
     </div>
