@@ -13,7 +13,7 @@ const topTabs = [
   { id: 'news', label: 'News' },
 ]
 
-export const StudentPage = () => {
+export const TeacherPage = () => {
   const [activeSidebarItem, setActiveSidebarItem] = useState('home')
 
   return (
@@ -26,13 +26,9 @@ export const StudentPage = () => {
       />
 
       <div className="student-main">
-        <RouteNavbar userName="A Dela Cruz" />
+        <RouteNavbar userName="Teacher Park" />
 
-        <SegmentTabs
-              items={topTabs}
-              activeTabId="dashboard"
-              ariaLabel="Student top tabs"
-            />
+        <SegmentTabs items={topTabs} activeTabId="dashboard" ariaLabel="Teacher top tabs" />
 
         <main className="student-content">
           <section className="student-content__main">
@@ -43,14 +39,7 @@ export const StudentPage = () => {
             </div>
 
             <section className="student-subjects">
-              <h2>Subjects</h2>
-              <div className="student-subject-tabs">
-                <button type="button" className="is-active">
-                  Enrolled <span>10</span>
-                </button>
-                <button type="button">Completed 0</button>
-              </div>
-
+              <h2>Courses</h2>
               <div className="student-subject-grid">
                 <article>Oral Communication</article>
                 <article>Earth and Life Science</article>
@@ -64,19 +53,24 @@ export const StudentPage = () => {
             <CalendarCard title="Calendar" />
 
             <section className="student-info-card">
-              <h3>To-Do</h3>
-              <p>2 Assignments Due</p>
+              <h3>Active Activities</h3>
+              <p>
+                1 Assignment 02 <span className="teacher-status-pill teacher-status-pill--green">2 Submitted</span>
+              </p>
+              <p className="teacher-card-subtext">Oral Communication Nature & Elements of Communication</p>
+            </section>
+
+            <section className="student-info-card">
+              <h3>To Grade</h3>
+              <p>
+                Pending Submissions{' '}
+                <span className="teacher-status-pill teacher-status-pill--amber">10 Pending</span>
+              </p>
             </section>
 
             <section className="student-info-card">
               <h3>Announcement</h3>
               <p>Dear CNHS Community, Please be advised.</p>
-            </section>
-
-            <section className="student-info-card">
-              <h3>Today</h3>
-              <p>Oral Communication - 1 Assignment 02</p>
-              <p>Oral Communication - 1 Quiz</p>
             </section>
           </aside>
         </main>

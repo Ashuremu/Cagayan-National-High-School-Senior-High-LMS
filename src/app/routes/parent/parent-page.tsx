@@ -13,7 +13,7 @@ const topTabs = [
   { id: 'news', label: 'News' },
 ]
 
-export const StudentPage = () => {
+export const ParentPage = () => {
   const [activeSidebarItem, setActiveSidebarItem] = useState('home')
 
   return (
@@ -26,13 +26,9 @@ export const StudentPage = () => {
       />
 
       <div className="student-main">
-        <RouteNavbar userName="A Dela Cruz" />
+        <RouteNavbar userName="Parent Dela Cruz" />
 
-        <SegmentTabs
-              items={topTabs}
-              activeTabId="dashboard"
-              ariaLabel="Student top tabs"
-            />
+        <SegmentTabs items={topTabs} activeTabId="dashboard" ariaLabel="Parent top tabs" />
 
         <main className="student-content">
           <section className="student-content__main">
@@ -43,7 +39,7 @@ export const StudentPage = () => {
             </div>
 
             <section className="student-subjects">
-              <h2>Subjects</h2>
+              <h2>Child Subjects</h2>
               <div className="student-subject-tabs">
                 <button type="button" className="is-active">
                   Enrolled <span>10</span>

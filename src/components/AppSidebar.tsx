@@ -9,12 +9,14 @@ interface AppSidebarProps {
   items: SidebarItem[]
   activeItemId?: string
   logoAlt?: string
+  onItemClick?: (itemId: string) => void
 }
 
 export const AppSidebar = ({
   items,
   activeItemId,
   logoAlt = 'App logo',
+  onItemClick,
 }: AppSidebarProps) => {
   return (
     <aside className="student-sidebar" aria-label="Application sidebar">
@@ -30,6 +32,7 @@ export const AppSidebar = ({
             className={`student-sidebar__nav-item ${
               item.id === activeItemId ? 'is-active' : ''
             }`}
+            onClick={() => onItemClick?.(item.id)}
           >
             {item.label}
           </button>

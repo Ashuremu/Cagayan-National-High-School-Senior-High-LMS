@@ -1,9 +1,13 @@
 import type { RouteObject } from 'react-router-dom'
+import { CoordinatorRoute } from './coordinator'
+import { ItAdminRoute } from './it-admin'
 import { LoginRoute } from './login'
+import { ParentRoute } from './parent'
+import { PrincipalRoute } from './principal'
 import { ProtectedRoute } from './protected-route'
 import { PublicOnlyRoute } from './public-only-route'
-import { RolePlaceholderPage } from './role-placeholder-page'
 import { StudentRoute } from './student'
+import { TeacherRoute } from './teacher'
 
 export const appRoutes: RouteObject[] = [
   {
@@ -26,7 +30,7 @@ export const appRoutes: RouteObject[] = [
     path: '/teacher',
     element: (
       <ProtectedRoute>
-        <RolePlaceholderPage role="Teacher" />
+        <TeacherRoute />
       </ProtectedRoute>
     ),
   },
@@ -34,7 +38,7 @@ export const appRoutes: RouteObject[] = [
     path: '/parent',
     element: (
       <ProtectedRoute>
-        <RolePlaceholderPage role="Parent" />
+        <ParentRoute />
       </ProtectedRoute>
     ),
   },
@@ -42,7 +46,7 @@ export const appRoutes: RouteObject[] = [
     path: '/coordinator',
     element: (
       <ProtectedRoute>
-        <RolePlaceholderPage role="Coordinator" />
+        <CoordinatorRoute />
       </ProtectedRoute>
     ),
   },
@@ -50,7 +54,7 @@ export const appRoutes: RouteObject[] = [
     path: '/it-admin',
     element: (
       <ProtectedRoute>
-        <RolePlaceholderPage role="IT Admin" />
+        <ItAdminRoute />
       </ProtectedRoute>
     ),
   },
@@ -58,7 +62,7 @@ export const appRoutes: RouteObject[] = [
     path: '/principal',
     element: (
       <ProtectedRoute>
-        <RolePlaceholderPage role="Principal" />
+        <PrincipalRoute />
       </ProtectedRoute>
     ),
   },
