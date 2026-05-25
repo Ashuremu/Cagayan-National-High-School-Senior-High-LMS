@@ -7,6 +7,7 @@ import {
   SegmentTabs,
 } from '../../../components'
 import { RouteNavbar } from '../navbar'
+import { EnrollmentPage } from './enrollment'
 
 const sidebarItems = [
   { id: 'home', label: 'Home' },
@@ -87,9 +88,14 @@ export const CoordinatorPage = () => {
 
       <div className="student-main">
         <RouteNavbar userName="Coordinator" />
-        <SegmentTabs items={topTabs} activeTabId="dashboard" ariaLabel="Coordinator top tabs" />
+        {activeSidebarItem === 'home' && (
+          <SegmentTabs items={topTabs} activeTabId="dashboard" ariaLabel="Coordinator top tabs" />
+        )}
 
         <main className="student-content coordinator-content">
+          {activeSidebarItem === 'enrollment' ? (
+            <EnrollmentPage />
+          ) : activeSidebarItem === 'home' ? (
           <section className="coordinator-main">
             <DashboardSummaryCards cards={summaryCards} />
 
@@ -162,6 +168,7 @@ export const CoordinatorPage = () => {
 
             <ActivityOverviewTable rows={activityRows} />
           </section>
+          ) : null}
 
           <aside className="student-content__side">
             <CalendarCard title="Calendar" />

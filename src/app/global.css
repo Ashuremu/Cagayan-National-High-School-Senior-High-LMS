@@ -857,6 +857,727 @@ html {
   gap: 10px;
 }
 
+.enrollment-page {
+  display: grid;
+  gap: 16px;
+}
+
+.enrollment-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.enrollment-header h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 33px;
+  letter-spacing: 0.02em;
+}
+
+.enrollment-add-btn {
+  border: none;
+  border-radius: 5px;
+  background: #24e13a;
+  color: #fff;
+  font-family: Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+  padding: 12px 16px;
+  cursor: pointer;
+}
+
+.enrollment-page .dashboard-summary-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.enrollment-list-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 16px 23px 20px;
+}
+
+.enrollment-list-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.enrollment-list-card h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.enrollment-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.enrollment-filter {
+  border: 1px solid #cac4d0;
+  border-radius: 8px;
+  background: #fff;
+  padding: 6px 16px;
+  font-family: Roboto, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: 0.1px;
+  color: #49454f;
+  cursor: pointer;
+}
+
+.enrollment-filter.is-active {
+  background: #070072;
+  border-color: #070072;
+  color: #fff;
+}
+
+.enrollment-table-wrap {
+  overflow-x: auto;
+}
+
+.enrollment-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px;
+}
+
+.enrollment-table th,
+.enrollment-table td {
+  border: 1px solid #b9b9b9;
+  padding: 10px 12px;
+  font-size: 12px;
+  line-height: 1.3;
+  text-align: center;
+}
+
+.enrollment-table th {
+  background: rgba(0, 0, 0, 0.06);
+  font-weight: 600;
+}
+
+.enrollment-table__grade {
+  font-size: 10px;
+  line-height: 1.3;
+}
+
+.enrollment-status {
+  display: inline-block;
+  padding: 4px 8px;
+  font-size: 12px;
+}
+
+.enrollment-status.is-pending {
+  background: #efff0e;
+}
+
+.enrollment-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.enrollment-actions button {
+  border: none;
+  background: transparent;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.enrollment-actions span {
+  color: #b3b3b3;
+}
+
+.enrollment-actions-muted {
+  color: #b3b3b3;
+}
+
+.enrollment-pagination {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.enrollment-pagination__field {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.enrollment-pagination__field select {
+  height: 42px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+  padding: 0 12px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.enrollment-page.is-dimmed {
+  opacity: 0.5;
+}
+
+.add-student-modal {
+  max-width: min(1164px, calc(100vw - 32px));
+  border-radius: 0;
+  background: #fff;
+}
+
+.add-student-modal > div:last-child {
+  padding: 0;
+}
+
+.add-student-modal__content {
+  position: relative;
+  padding: 40px 105px 32px;
+  max-height: min(951px, calc(100vh - 48px));
+  overflow-y: auto;
+}
+
+.add-student-modal__close {
+  position: absolute;
+  top: 16px;
+  right: 24px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  color: #ec221f;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.add-student-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding-right: 48px;
+}
+
+.add-student-modal__title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 33px;
+  color: #000;
+}
+
+.add-student-modal__test-btn {
+  border: 1px dashed #00954d;
+  border-radius: 5px;
+  background: #f0fdf4;
+  padding: 8px 14px;
+  font-family: Inter, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #00954d;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.add-student-modal__test-btn:hover {
+  background: #dcfce7;
+}
+
+.add-student-modal__form {
+  display: grid;
+  gap: 20px;
+}
+
+.add-student-modal__section {
+  border: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.add-student-modal__section legend {
+  font-family: Inter, sans-serif;
+  font-size: 12px;
+  line-height: 1.3;
+  color: #000;
+  padding: 0;
+  margin-bottom: 4px;
+}
+
+.add-student-modal__section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.add-student-modal__section-heading legend {
+  margin-bottom: 0;
+}
+
+.add-student-modal__same-address {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: Inter, sans-serif;
+  font-size: 10px;
+  line-height: 1.3;
+  color: rgba(137, 123, 123, 0.66);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.add-student-modal__same-address input {
+  width: 9px;
+  height: 9px;
+  margin: 0;
+  border: 1px solid rgba(137, 123, 123, 0.66);
+  border-radius: 2px;
+}
+
+.add-student-modal__column {
+  display: grid;
+  gap: 16px;
+}
+
+.add-student-modal__grid {
+  display: grid;
+  gap: 12px;
+}
+
+.add-student-modal__grid--2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.add-student-modal__grid--3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.add-student-modal__grid--4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.add-student-modal__grid--birth {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.add-student-modal__grid--address-bottom {
+  grid-template-columns: minmax(0, 1.52fr) minmax(0, 1.52fr) minmax(0, 1fr) minmax(0, 0);
+}
+
+.add-student-modal__grid-spacer {
+  display: none;
+}
+
+.form-field,
+.add-student-modal__field {
+  display: grid;
+  gap: 6px;
+}
+
+.form-field--wide,
+.add-student-modal__field--wide {
+  grid-column: span 1;
+}
+
+.form-field span,
+.add-student-modal__field span {
+  font-family: Inter, sans-serif;
+  font-size: 12px;
+  line-height: 1.3;
+  color: #000;
+}
+
+.form-field input,
+.form-field select,
+.add-student-modal__field input,
+.add-student-modal__field select {
+  width: 100%;
+  height: 34px;
+  border: 1px solid #00954d;
+  border-radius: 5px;
+  background: #fff;
+  padding: 0 12px;
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  color: #000;
+}
+
+.form-field input:disabled,
+.add-student-modal__field input:disabled {
+  background: #f3f4f6;
+  color: #9ca3af;
+}
+
+.form-field select,
+.add-student-modal__field select {
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, #00954d 50%),
+    linear-gradient(135deg, #00954d 50%, transparent 50%);
+  background-position: calc(100% - 16px) calc(50% + 2px), calc(100% - 10px) calc(50% + 2px);
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+  padding-right: 32px;
+}
+
+.add-student-modal__group-title {
+  margin: 0 0 12px;
+  font-family: Inter, sans-serif;
+  font-size: 12px;
+  line-height: 1.3;
+  color: rgba(0, 0, 0, 0.57);
+}
+
+.add-student-modal__parents-group {
+  display: grid;
+  gap: 20px;
+}
+
+.add-student-modal__parent-block {
+  display: grid;
+  gap: 12px;
+}
+
+.add-student-modal__subsection-title {
+  margin: 0;
+  font-family: Inter, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.3;
+  color: #000;
+}
+
+.add-student-modal__grid--school-top {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.add-student-modal__grid--parent-contact {
+  grid-template-columns: minmax(0, 1.52fr) minmax(0, 1.52fr) minmax(0, 1fr);
+}
+
+.add-student-modal__grid--guardian-contact {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.add-student-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 8px;
+}
+
+.add-student-modal__actions--split {
+  justify-content: space-between;
+}
+
+.add-student-modal__previous,
+.add-student-modal__previous,
+.add-student-modal__next {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 32px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #fff;
+  font-family: Inter, sans-serif;
+  font-size: 16px;
+  line-height: 1;
+  color: #1e1e1e;
+  cursor: pointer;
+}
+
+.add-student-modal__previous {
+  border: 1px solid #000;
+}
+
+.add-student-modal__next {
+  border: 1px solid rgba(0, 0, 0, 0.54);
+}
+
+.add-student-modal__requirements {
+  display: grid;
+  gap: 12px;
+}
+
+.add-student-modal__requirements-title {
+  margin: 0;
+  font-family: Inter, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.3;
+  color: #000;
+}
+
+.add-student-modal__requirements-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 18px;
+}
+
+.add-student-modal__requirement-item {
+  display: grid;
+  grid-template-columns: 17px 1fr;
+  gap: 12px;
+  align-items: start;
+  font-family: Inter, sans-serif;
+  font-size: 12px;
+  line-height: 1.3;
+  color: #000;
+  cursor: pointer;
+}
+
+.add-student-modal__requirement-item input {
+  width: 17px;
+  height: 17px;
+  margin: 2px 0 0;
+  border: 1px solid #000;
+  border-radius: 3px;
+  accent-color: #00954d;
+}
+
+.file-upload {
+  display: grid;
+  gap: 20px;
+}
+
+.file-upload__section {
+  display: grid;
+  gap: 12px;
+}
+
+.file-upload__label {
+  margin: 0;
+  font-family: Inter, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.3;
+  color: #000;
+}
+
+.file-upload__dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 132px;
+  padding: 22px 24px 16px;
+  background: #fafdff;
+  border: 1px dashed #cfd6dd;
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.file-upload__input {
+  display: none;
+}
+
+.file-upload__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  font-size: 18px;
+  color: #808792;
+}
+
+.file-upload__text {
+  margin: 0;
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #000;
+}
+
+.file-upload__text strong {
+  color: #2563eb;
+}
+
+.file-upload__hint {
+  margin: 0;
+  font-family: Inter, sans-serif;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #54585e;
+}
+
+.file-upload__empty {
+  margin: 0;
+  font-family: Inter, sans-serif;
+  font-size: 12px;
+  color: #54585e;
+}
+
+.file-upload__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 8px;
+}
+
+.file-upload__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid #cfd6dd;
+  border-radius: 6px;
+  background: #fff;
+  font-family: Inter, sans-serif;
+  font-size: 12px;
+  color: #000;
+}
+
+.file-upload__item button {
+  border: none;
+  background: transparent;
+  font-size: 12px;
+  color: #ec221f;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.add-student-modal__review {
+  display: grid;
+  gap: 16px;
+}
+
+.add-student-modal__review-intro {
+  margin: 0;
+  font-family: Inter, sans-serif;
+  font-size: 12px;
+  line-height: 1.3;
+  color: #000;
+}
+
+.add-student-modal__review-sections {
+  display: grid;
+  gap: 0;
+  border: 1px solid #b9b9b9;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.add-student-modal__review-accordion {
+  border-bottom: 1px solid #b9b9b9;
+}
+
+.add-student-modal__review-accordion:last-child {
+  border-bottom: none;
+}
+
+.add-student-modal__review-accordion-header {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 24px;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: none;
+  background: rgba(57, 53, 114, 0.21);
+  font-family: Inter, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #070072;
+  text-align: left;
+  cursor: pointer;
+}
+
+.add-student-modal__review-chevron {
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 8px solid #00954d;
+  justify-self: end;
+  transition: transform 0.2s ease;
+}
+
+.add-student-modal__review-chevron.is-open {
+  transform: rotate(180deg);
+}
+
+.add-student-modal__review-table {
+  display: grid;
+}
+
+.add-student-modal__review-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-top: 1px solid #b9b9b9;
+}
+
+.add-student-modal__review-label,
+.add-student-modal__review-value {
+  padding: 10px 12px;
+  font-family: Inter, sans-serif;
+  font-size: 12px;
+  line-height: 1.3;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+}
+
+.add-student-modal__review-label {
+  color: #000;
+  border-right: 1px solid #b9b9b9;
+  background: rgba(255, 255, 255, 0.002);
+}
+
+.add-student-modal__review-value {
+  color: #000;
+  background: #fff;
+  word-break: break-word;
+}
+
+.add-student-modal__actions--review {
+  align-items: flex-start;
+  margin-top: 8px;
+}
+
+.add-student-modal__submit {
+  min-width: 165px;
+  height: 47px;
+  border: 1px solid #b3b3b3;
+  border-radius: 5px;
+  background: #24e13a;
+  font-family: Poppins, sans-serif;
+  font-size: 15px;
+  line-height: 22px;
+  letter-spacing: 0.02em;
+  color: #fff;
+  cursor: pointer;
+}
+
 .dashboard-table-card {
   background: #fff;
   border-radius: 10px;
@@ -1413,6 +2134,41 @@ html {
     width: 100%;
     min-width: 0;
   }
+
+  .add-student-modal__grid--2,
+  .add-student-modal__grid--3,
+  .add-student-modal__grid--4,
+  .add-student-modal__grid--birth,
+  .add-student-modal__grid--address-bottom,
+  .add-student-modal__grid--school-top,
+  .add-student-modal__grid--parent-contact,
+  .add-student-modal__grid--guardian-contact {
+    grid-template-columns: 1fr;
+  }
+
+  .add-student-modal__actions--split {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .add-student-modal__review-row {
+    grid-template-columns: 1fr;
+  }
+
+  .add-student-modal__review-label {
+    border-right: none;
+    border-bottom: 1px solid #b9b9b9;
+  }
+
+  .add-student-modal__submit {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .add-student-modal__section-heading {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
 .edit-user-modal {
@@ -1963,6 +2719,40 @@ html {
 
   .coordinator-panels {
     grid-template-columns: 1fr;
+  }
+
+  .enrollment-page .dashboard-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .enrollment-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .enrollment-list-card__top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .enrollment-pagination {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .add-student-modal__content {
+    padding: 40px 24px 24px;
+  }
+
+  .add-student-modal__grid--2,
+  .add-student-modal__grid--3,
+  .add-student-modal__grid--4,
+  .add-student-modal__grid--birth,
+  .add-student-modal__grid--address-bottom,
+  .add-student-modal__grid--school-top,
+  .add-student-modal__grid--parent-contact,
+  .add-student-modal__grid--guardian-contact {
+    grid-template-columns: 1fr 1fr;
   }
 
   .itadmin-bottom-grid {
