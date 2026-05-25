@@ -6,6 +6,8 @@ import {
   SegmentTabs,
 } from '../../../components'
 import { RouteNavbar } from '../navbar'
+import { ManageUsersPage } from './manage-users'
+import { SystemPage } from './system'
 
 const sidebarItems = [
   { id: 'home', label: 'Home' },
@@ -57,88 +59,96 @@ export const ItAdminPage = () => {
 
       <div className="student-main">
         <RouteNavbar userName="IT Admin" />
-        <SegmentTabs items={topTabs} activeTabId="dashboard" ariaLabel="IT Admin top tabs" />
+        {activeSidebarItem === 'home' && (
+          <SegmentTabs items={topTabs} activeTabId="dashboard" ariaLabel="IT Admin top tabs" />
+        )}
 
         <main className="student-content itadmin-content">
-          <section className="itadmin-main">
-            <DashboardSummaryCards cards={summaryCards} />
+          {activeSidebarItem === 'manage-users' ? (
+            <ManageUsersPage />
+          ) : activeSidebarItem === 'system' ? (
+            <SystemPage />
+          ) : (
+            <section className="itadmin-main">
+              <DashboardSummaryCards cards={summaryCards} />
 
-            <section className="itadmin-users-card">
-              <h3>Manage Users Account</h3>
-              <p>Create, modify, and delete user accounts</p>
+              <section className="itadmin-users-card">
+                <h3>Manage Users Account</h3>
+                <p>Create, modify, and delete user accounts</p>
 
-              <div className="itadmin-users-table-wrap">
-                <table className="itadmin-users-table">
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Role</th>
-                      <th>Email</th>
-                      <th>Status</th>
-                      <th>Last Login</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {users.map((user) => (
-                      <tr key={user.email}>
-                        <td>{user.name}</td>
-                        <td>{user.role}</td>
-                        <td>{user.email}</td>
-                        <td>{user.status}</td>
-                        <td>{user.lastLogin}</td>
-                        <td>EDIT</td>
+                <div className="itadmin-users-table-wrap">
+                  <table className="itadmin-users-table">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Role</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Last Login</th>
+                        <th>Action</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                    </thead>
+                    <tbody>
+                      {users.map((user) => (
+                        <tr key={user.email}>
+                          <td>{user.name}</td>
+                          <td>{user.role}</td>
+                          <td>{user.email}</td>
+                          <td>{user.status}</td>
+                          <td>{user.lastLogin}</td>
+                          <td>EDIT</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
 
-              <div className="itadmin-users-footer">
-                <span>Showing 3 of 1,250 users</span>
-                <button type="button">View All Users</button>
+                <div className="itadmin-users-footer">
+                  <span>Showing 3 of 1,250 users</span>
+                  <button type="button">View All Users</button>
+                </div>
+              </section>
+
+              <div className="itadmin-bottom-grid">
+                <section className="itadmin-card">
+                  <h3>System Health</h3>
+                  <p>Server and resource monitoring</p>
+                  <div className="itadmin-health-list">
+                    {health.map((metric) => (
+                      <div key={metric.label} className="itadmin-health-item">
+                        <div>
+                          <strong>{metric.label}</strong>
+                          <span>{metric.value}%</span>
+                        </div>
+                        <div className="itadmin-progress">
+                          <div style={{ width: `${metric.value}%` }} />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <button type="button" className="itadmin-ghost-button">
+                    View Detailed Metrics
+                  </button>
+                </section>
+
+                <section className="itadmin-card">
+                  <h3>System Alerts</h3>
+                  <p>Recent notifications and warnings</p>
+                  <div className="itadmin-alert-list">
+                    {alerts.map((alert) => (
+                      <article key={alert.title} className="itadmin-alert-item">
+                        <span className={`itadmin-alert-dot is-${alert.tone}`} />
+                        <div>
+                          <h4>{alert.title}</h4>
+                          <p>{alert.time}</p>
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                </section>
               </div>
             </section>
-
-            <div className="itadmin-bottom-grid">
-              <section className="itadmin-card">
-                <h3>System Health</h3>
-                <p>Server and resource monitoring</p>
-                <div className="itadmin-health-list">
-                  {health.map((metric) => (
-                    <div key={metric.label} className="itadmin-health-item">
-                      <div>
-                        <strong>{metric.label}</strong>
-                        <span>{metric.value}%</span>
-                      </div>
-                      <div className="itadmin-progress">
-                        <div style={{ width: `${metric.value}%` }} />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <button type="button" className="itadmin-ghost-button">
-                  View Detailed Metrics
-                </button>
-              </section>
-
-              <section className="itadmin-card">
-                <h3>System Alerts</h3>
-                <p>Recent notifications and warnings</p>
-                <div className="itadmin-alert-list">
-                  {alerts.map((alert) => (
-                    <article key={alert.title} className="itadmin-alert-item">
-                      <span className={`itadmin-alert-dot is-${alert.tone}`} />
-                      <div>
-                        <h4>{alert.title}</h4>
-                        <p>{alert.time}</p>
-                      </div>
-                    </article>
-                  ))}
-                </div>
-              </section>
-            </div>
-          </section>
+          )}
 
           <aside className="student-content__side">
             <CalendarCard title="Calendar" />
