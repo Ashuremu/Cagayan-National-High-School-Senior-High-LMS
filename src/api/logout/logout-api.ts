@@ -1,22 +1,16 @@
-type LogoutError = {
+import { API_ENDPOINTS, apiUrl, defaultFetchOptions } from '../config'
+
+export type LogoutError = {
   message: string
 }
 
-type LogoutResult = { ok: true } | { ok: false; error: LogoutError }
-
-const BACKEND_API_BASE_URL =
-  (import.meta.env.VITE_API_URL as string | undefined)?.trim() || 'http://localhost:5000/api'
-
-function buildBackendLogoutUrl() {
-  const normalizedBaseUrl = BACKEND_API_BASE_URL.replace(/\/+$/, '')
-  return `${normalizedBaseUrl}/auth/logout`
-}
+export type LogoutResult = { ok: true } | { ok: false; error: LogoutError }
 
 export async function logoutWithBackend(): Promise<LogoutResult> {
   try {
-    const response = await fetch(buildBackendLogoutUrl(), {
+    const response = await fetch(apiUrl(API_ENDPOINTS.logout), {
       method: 'POST',
-      credentials: 'include',
+      ...defaultFetchOptions,
     })
 
     if (!response.ok) {

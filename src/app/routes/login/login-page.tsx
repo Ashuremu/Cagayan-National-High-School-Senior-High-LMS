@@ -4,7 +4,7 @@ import { HighlightCard, HighlightGrid } from '../../../components'
 import Modal from '../../../components/Modal'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { loginWithBackend } from './server/login-api'
+import { loginWithBackend } from '../../../api/login/login-api'
 import { getLandingPathForRole } from '../role-landing'
 
 const highlights = [
@@ -75,7 +75,7 @@ export const LoginPage = () => {
       }
 
       setIsLoginModalOpen(false)
-      navigate(getLandingPathForRole(result.data.user.role))
+      navigate(getLandingPathForRole(result.data.user.role ?? ''))
     } catch {
       setErrorMessage('Cannot connect to server. Please try again.')
     } finally {

@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react'
 import { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
-import { checkAuthenticated } from '../auth'
+import { checkAuthenticated } from '../../../api/session/session-api'
 
 export const ProtectedRoute = ({ children }: PropsWithChildren) => {
   const [status, setStatus] = useState<'loading' | 'allowed' | 'blocked'>('loading')

@@ -1,37 +1,34 @@
-type LoginRequest = {
+import { API_ENDPOINTS, apiUrl, defaultFetchOptions } from '../config'
+
+export type LoginRequest = {
   email: string
   password: string
 }
 
-type LoginUser = {
+export type LoginUser = {
   id: string
+  uid: string
   email: string
-  role: string
+  roleId: string | null
+  role: string | null
 }
 
-type LoginSuccess = {
+export type LoginSuccess = {
   user: LoginUser
 }
 
-type LoginError = {
+export type LoginError = {
   message: string
 }
 
-type LoginResult = { ok: true; data: LoginSuccess } | { ok: false; error: LoginError }
-const BACKEND_API_BASE_URL =
-  (import.meta.env.VITE_API_URL as string | undefined)?.trim() || 'http://localhost:5000/api'
-
-function buildBackendLoginUrl() {
-  const normalizedBaseUrl = BACKEND_API_BASE_URL.replace(/\/+$/, '')
-  return `${normalizedBaseUrl}/auth/login`
-}
+export type LoginResult = { ok: true; data: LoginSuccess } | { ok: false; error: LoginError }
 
 export async function loginWithBackend(credentials: LoginRequest): Promise<LoginResult> {
   try {
-    const response = await fetch(buildBackendLoginUrl(), {
+    const response = await fetch(apiUrl(API_ENDPOINTS.login), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
+      ...defaultFetchOptions,
       body: JSON.stringify(credentials),
     })
 

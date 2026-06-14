@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react'
 import { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
-import { getSessionUser } from '../auth'
+import { getSessionUser } from '../../../api/session/session-api'
 import { getLandingPathForRole } from './role-landing'
 
 export const PublicOnlyRoute = ({ children }: PropsWithChildren) => {
@@ -17,7 +17,7 @@ export const PublicOnlyRoute = ({ children }: PropsWithChildren) => {
         return
       }
 
-      setRedirectPath(getLandingPathForRole(user.role))
+      setRedirectPath(getLandingPathForRole(user.role ?? ''))
       setStatus('redirect-private')
     })
 

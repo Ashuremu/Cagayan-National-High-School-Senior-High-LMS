@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { UserProfileMenu } from '../../../components'
-import { logoutWithBackend } from './server/logout-api'
+import { logoutWithBackend } from '../../../api/logout/logout-api'
 
 type RouteNavbarProps = {
   userName: string
