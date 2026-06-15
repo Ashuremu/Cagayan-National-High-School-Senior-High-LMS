@@ -8,6 +8,7 @@ import {
 } from '../../../components'
 import { RouteNavbar } from '../navbar'
 import { EnrollmentPage } from './enrollment'
+import { SubjectsPage } from './subjects'
 
 const sidebarItems = [
   { id: 'home', label: 'Home' },
@@ -95,6 +96,8 @@ export const CoordinatorPage = () => {
         <main className="student-content coordinator-content">
           {activeSidebarItem === 'enrollment' ? (
             <EnrollmentPage />
+          ) : activeSidebarItem === 'subjects' ? (
+            <SubjectsPage />
           ) : activeSidebarItem === 'home' ? (
           <section className="coordinator-main">
             <DashboardSummaryCards cards={summaryCards} />
