@@ -51,16 +51,21 @@ const scheduleByKeyword: { keyword: string; row: Omit<RegistrationScheduleRow, '
 export const getScheduleForSubject = (subject: string): RegistrationScheduleRow => {
   const normalized = subject.toLowerCase()
   const match = scheduleByKeyword.find((entry) => normalized.includes(entry.keyword))
+  const displaySubject = normalized.includes('earth')
+    ? 'Earth Life & Science'
+    : normalized.includes('physical education')
+      ? 'Physical Education 1'
+      : subject
 
   if (match) {
     return {
-      subject,
+      subject: displaySubject,
       ...match.row,
     }
   }
 
   return {
-    subject,
+    subject: displaySubject,
     days: '',
     time: '',
     room: '',

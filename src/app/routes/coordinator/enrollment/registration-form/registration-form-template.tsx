@@ -39,13 +39,17 @@ export const RegistrationFormTemplate = ({ data }: RegistrationFormTemplateProps
       <img src={logo} alt="Cagayan National High School logo" className="registration-form__logo" />
       <div className="registration-form__header-text">
         <h1>CAGAYAN NATIONAL HIGH SCHOOL - SENIOR HIGH</h1>
-        <p>Taft Street, Bagay Road, Tuguegarao City, Philippines</p>
-        <p>cnhs.seniorhs@gmail.com</p>
+        <address className="registration-form__header-address">
+          <span>Taft Street, Bagay Road,</span>
+          <span>Tuguegarao City,</span>
+          <span>Philippines</span>
+          <span>cnhs.seniorhs@gmail.com</span>
+        </address>
       </div>
     </header>
 
     <div className="registration-form__body">
-      <section className="registration-form__section">
+      <section className="registration-form__section registration-form__section--student">
         <h2 className="registration-form__section-title">STUDENT INFORMATION</h2>
         <div className="registration-form__section-content">
           <FieldRow label="Full Name:" value={data.fullName} />
@@ -57,7 +61,7 @@ export const RegistrationFormTemplate = ({ data }: RegistrationFormTemplateProps
         </div>
       </section>
 
-      <section className="registration-form__section">
+      <section className="registration-form__section registration-form__section--contact">
         <h2 className="registration-form__section-title">CONTACT INFORMATION</h2>
         <div className="registration-form__section-content">
           <ContactRow
@@ -78,9 +82,9 @@ export const RegistrationFormTemplate = ({ data }: RegistrationFormTemplateProps
         </div>
       </section>
 
-      <section className="registration-form__section">
+      <section className="registration-form__section registration-form__section--academic">
         <h2 className="registration-form__section-title">ACADEMIC</h2>
-        <div className="registration-form__section-content">
+        <div className="registration-form__section-content registration-form__section-content--table">
           <table className="registration-form__table">
             <thead>
               <tr>
@@ -113,21 +117,21 @@ export const RegistrationFormTemplate = ({ data }: RegistrationFormTemplateProps
             credentials are:
           </p>
           <p>
-            <strong>Username:</strong> {data.username}
+            <span className="registration-form__credentials-label">Username:</span> {data.username}
           </p>
           <p>{data.passwordHint}</p>
         </div>
 
         <div className="registration-form__footer">
           <div className="registration-form__signature">
-            <span className="registration-form__signature-line" />
-            <span>Student Signature</span>
+            <span className="registration-form__signature-label">Student Signature</span>
+            <span className="registration-form__signature-line" aria-hidden="true" />
           </div>
           <div className="registration-form__date">
             <span className="registration-form__date-value">{data.registrationDate.day}</span>
-            <span>/</span>
+            <span className="registration-form__date-separator">/</span>
             <span className="registration-form__date-value">{data.registrationDate.month}</span>
-            <span>/</span>
+            <span className="registration-form__date-separator">/</span>
             <span className="registration-form__date-value">{data.registrationDate.year}</span>
           </div>
         </div>
