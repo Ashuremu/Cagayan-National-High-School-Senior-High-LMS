@@ -1578,6 +1578,556 @@ html {
   cursor: pointer;
 }
 
+.add-student-modal--success .add-student-modal__content {
+  padding: 16px 107px 48px;
+  min-height: min(953px, calc(100vh - 48px));
+  display: flex;
+  flex-direction: column;
+}
+
+.add-student-modal__success {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: stretch;
+  text-align: left;
+}
+
+.add-student-modal__success-title {
+  margin: 92px 0 0;
+  font-family: Inter, sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0.05em;
+  text-align: center;
+  color: #000;
+}
+
+.add-student-modal__success-details {
+  display: grid;
+  gap: 50px;
+  margin: 142px 0 0;
+}
+
+.add-student-modal__success-detail {
+  margin: 0;
+  font-family: Inter, sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.3;
+  color: #000;
+}
+
+.add-student-modal__success-detail--strong {
+  font-weight: 700;
+}
+
+.add-student-modal__success-message {
+  margin: 109px 0 0;
+  font-family: Inter, sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.3;
+  color: #000;
+}
+
+.add-student-modal__success-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 17px;
+  margin-top: auto;
+  padding-top: 48px;
+}
+
+.add-student-modal__assign-btn,
+.add-student-modal__success-close-btn {
+  height: 47px;
+  border: 1px solid #b3b3b3;
+  border-radius: 5px;
+  font-family: Inter, sans-serif;
+  font-size: 12px;
+  line-height: 1.3;
+  color: #fff;
+  cursor: pointer;
+}
+
+.add-student-modal__assign-btn {
+  min-width: 213px;
+  padding: 2px 10px;
+  background: #e1b524;
+}
+
+.add-student-modal__success-close-btn {
+  min-width: 165px;
+  padding: 2px 10px;
+  background: #b9b9b9;
+}
+
+.approve-enrollment-modal {
+  max-width: min(1164px, calc(100vw - 32px));
+  border-radius: 0;
+  background: #fff;
+}
+
+.approve-enrollment-modal > div:last-child {
+  padding: 0;
+}
+
+.approve-enrollment-modal__content {
+  position: relative;
+  padding: 40px 105px 32px;
+  max-height: min(953px, calc(100vh - 48px));
+  overflow-y: auto;
+}
+
+.approve-enrollment-modal__close {
+  position: absolute;
+  top: 16px;
+  right: 24px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  color: #ec221f;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.approve-enrollment-modal__title {
+  margin: 0 0 24px;
+  font-family: Poppins, sans-serif;
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 33px;
+  color: #000;
+}
+
+.approve-enrollment-modal__form {
+  display: grid;
+  gap: 24px;
+}
+
+.approve-enrollment-modal__review .add-student-modal__review-intro {
+  display: none;
+}
+
+.approve-enrollment-modal__section-field,
+.approve-enrollment-modal__remarks-field {
+  max-width: 380px;
+}
+
+.approve-enrollment-modal__subjects {
+  border: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.approve-enrollment-modal__subjects legend {
+  font-family: Inter, sans-serif;
+  font-size: 12px;
+  line-height: 1.3;
+  color: #000;
+  margin-bottom: 4px;
+}
+
+.approve-enrollment-modal__subjects-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px 24px;
+}
+
+.approve-enrollment-modal__subject-item {
+  display: grid;
+  grid-template-columns: 17px 1fr;
+  gap: 12px;
+  align-items: start;
+  font-family: Inter, sans-serif;
+  font-size: 12px;
+  line-height: 1.3;
+  color: #000;
+  cursor: pointer;
+}
+
+.approve-enrollment-modal__subject-item input {
+  width: 17px;
+  height: 17px;
+  margin: 2px 0 0;
+  border: 1px solid #000;
+  border-radius: 3px;
+  accent-color: #000;
+}
+
+.approve-enrollment-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 17px;
+  padding-top: 8px;
+}
+
+.approve-enrollment-modal__confirm-btn,
+.approve-enrollment-modal__close-btn {
+  height: 47px;
+  border: 1px solid #b3b3b3;
+  border-radius: 5px;
+  font-family: Poppins, sans-serif;
+  font-size: 15px;
+  line-height: 22px;
+  letter-spacing: 0.02em;
+  color: #fff;
+  cursor: pointer;
+}
+
+.approve-enrollment-modal__confirm-btn {
+  min-width: 208px;
+  padding: 2px 10px;
+  background: #24e13a;
+}
+
+.approve-enrollment-modal__close-btn {
+  min-width: 165px;
+  padding: 2px 10px;
+  background: #b9b9b9;
+  font-family: Inter, sans-serif;
+  font-size: 12px;
+  line-height: 1.3;
+}
+
+.approve-enrollment-modal--success .approve-enrollment-modal__content {
+  padding: 16px 107px 48px;
+  min-height: min(953px, calc(100vh - 48px));
+  display: flex;
+  flex-direction: column;
+}
+
+.enrollment-approved-modal__success {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: stretch;
+  text-align: left;
+}
+
+.enrollment-approved-modal__success-title {
+  margin: 92px 0 0;
+  font-family: Inter, sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0.05em;
+  text-align: center;
+  color: #000;
+}
+
+.enrollment-approved-modal__success-details {
+  display: grid;
+  gap: 50px;
+  margin: 142px 0 0;
+}
+
+.enrollment-approved-modal__success-detail {
+  margin: 0;
+  font-family: Inter, sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.3;
+  color: #000;
+}
+
+.enrollment-approved-modal__success-detail--strong {
+  font-weight: 700;
+}
+
+.enrollment-approved-modal__success-detail--subjects {
+  align-items: flex-start;
+}
+
+.enrollment-approved-modal__success-message {
+  margin: 109px 0 0;
+  font-family: Inter, sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.3;
+  color: #000;
+}
+
+.enrollment-approved-modal__success-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 17px;
+  margin-top: auto;
+  padding-top: 48px;
+}
+
+.enrollment-approved-modal__print-btn,
+.enrollment-approved-modal__success-close-btn {
+  height: 47px;
+  border: 1px solid #b3b3b3;
+  border-radius: 5px;
+  font-family: Inter, sans-serif;
+  font-size: 12px;
+  line-height: 1.3;
+  color: #fff;
+  cursor: pointer;
+}
+
+.enrollment-approved-modal__print-btn {
+  min-width: 213px;
+  padding: 2px 10px;
+  background: #4000ff;
+}
+
+.enrollment-approved-modal__success-close-btn {
+  min-width: 165px;
+  padding: 2px 10px;
+  background: #b9b9b9;
+}
+
+#registration-form-print-root {
+  position: fixed;
+  left: -10000px;
+  top: 0;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.registration-form {
+  box-sizing: border-box;
+  width: 8.5in;
+  max-width: 100%;
+  margin: 0;
+  border: 2px solid #070072;
+  background: #fff;
+  color: #000;
+  font-family: Inter, Arial, sans-serif;
+}
+
+.registration-form__header {
+  display: grid;
+  grid-template-columns: 88px 1fr;
+  gap: 16px;
+  align-items: center;
+  padding: 18px 20px;
+  background: #070072;
+  color: #fff;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 18px), calc(100% - 18px) 100%, 0 100%);
+}
+
+.registration-form__logo {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  background: #fff;
+  border-radius: 50%;
+  padding: 4px;
+}
+
+.registration-form__header-text h1 {
+  margin: 0 0 6px;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+}
+
+.registration-form__header-text p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.registration-form__body {
+  padding: 0;
+}
+
+.registration-form__section-title {
+  margin: 0;
+  padding: 8px 12px;
+  background: #070072;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+
+.registration-form__section-content {
+  padding: 12px 20px 16px;
+}
+
+.registration-form__field-row,
+.registration-form__contact-item {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 12px;
+  align-items: end;
+  margin-bottom: 12px;
+}
+
+.registration-form__field-label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.registration-form__field-value {
+  min-height: 22px;
+  border-bottom: 1px solid #070072;
+  font-size: 14px;
+  line-height: 1.3;
+  padding-bottom: 2px;
+}
+
+.registration-form__contact-row.is-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+}
+
+.registration-form__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.registration-form__table th,
+.registration-form__table td {
+  border: 1px solid #070072;
+  padding: 8px 10px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.registration-form__table th {
+  font-weight: 700;
+}
+
+.registration-form__section--credentials {
+  padding: 0 24px 28px;
+}
+
+.registration-form__credentials p {
+  margin: 0 0 10px;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.registration-form__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  margin-top: 36px;
+}
+
+.registration-form__signature {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 280px;
+  font-size: 12px;
+}
+
+.registration-form__signature-line {
+  display: block;
+  width: 100%;
+  border-bottom: 1px solid #070072;
+  min-height: 28px;
+}
+
+.registration-form__date {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.registration-form__date-value {
+  display: inline-block;
+  min-width: 34px;
+  text-align: center;
+  border-bottom: 1px solid #070072;
+  padding-bottom: 2px;
+}
+
+@media print {
+  html,
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+    height: auto !important;
+    background: #fff !important;
+  }
+
+  body.is-printing-registration-form > *:not(#registration-form-print-root) {
+    display: none !important;
+  }
+
+  body.is-printing-registration-form #registration-form-print-root {
+    display: block !important;
+    position: static !important;
+    left: auto !important;
+    top: auto !important;
+    width: auto !important;
+    height: auto !important;
+    overflow: visible !important;
+    pointer-events: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  @page {
+    size: legal portrait;
+    margin: 8mm;
+  }
+
+  .registration-form {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    border-width: 1.5px;
+    page-break-after: avoid;
+  }
+
+  .registration-form__header,
+  .registration-form__section--credentials {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .registration-form__table {
+    font-size: 11px;
+    break-inside: auto;
+    page-break-inside: auto;
+  }
+
+  .registration-form__table th,
+  .registration-form__table td {
+    padding: 6px 8px;
+  }
+
+  .registration-form__field-row,
+  .registration-form__contact-item {
+    margin-bottom: 10px;
+  }
+
+  .registration-form__section-content {
+    padding: 10px 16px 12px;
+  }
+
+  .registration-form__footer {
+    margin-top: 24px;
+  }
+}
+
 .dashboard-table-card {
   background: #fff;
   border-radius: 10px;
@@ -2742,6 +3292,89 @@ html {
 
   .add-student-modal__content {
     padding: 40px 24px 24px;
+  }
+
+  .add-student-modal--success .add-student-modal__content {
+    padding: 16px 24px 32px;
+    min-height: auto;
+  }
+
+  .add-student-modal__success-title {
+    margin-top: 48px;
+    font-size: 24px;
+  }
+
+  .add-student-modal__success-details {
+    margin-top: 48px;
+    gap: 24px;
+  }
+
+  .add-student-modal__success-message {
+    margin-top: 32px;
+  }
+
+  .add-student-modal__success-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .add-student-modal__assign-btn,
+  .add-student-modal__success-close-btn {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .approve-enrollment-modal__content {
+    padding: 40px 24px 24px;
+  }
+
+  .approve-enrollment-modal__subjects-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .approve-enrollment-modal__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .approve-enrollment-modal__confirm-btn,
+  .approve-enrollment-modal__close-btn {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .approve-enrollment-modal--success .approve-enrollment-modal__content {
+    padding: 40px 24px 24px;
+    min-height: auto;
+  }
+
+  .enrollment-approved-modal__success-title {
+    margin-top: 48px;
+    font-size: 24px;
+  }
+
+  .enrollment-approved-modal__success-details {
+    gap: 24px;
+    margin-top: 48px;
+  }
+
+  .enrollment-approved-modal__success-detail {
+    font-size: 16px;
+  }
+
+  .enrollment-approved-modal__success-message {
+    margin-top: 32px;
+  }
+
+  .enrollment-approved-modal__success-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .enrollment-approved-modal__print-btn,
+  .enrollment-approved-modal__success-close-btn {
+    width: 100%;
+    min-width: 0;
   }
 
   .add-student-modal__grid--2,

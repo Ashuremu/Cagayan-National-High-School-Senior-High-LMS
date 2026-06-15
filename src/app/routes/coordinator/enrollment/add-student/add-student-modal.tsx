@@ -2,8 +2,10 @@ import { useEffect, useRef, useState, type FormEvent } from 'react'
 import Modal from '../../../../../components/Modal'
 import { AddStudentStepOne } from './add-student-step-one'
 import { AddStudentStepFour } from './add-student-step-four'
+import { AddStudentStepSuccess } from './add-student-step-success'
 import { AddStudentStepThree } from './add-student-step-three'
 import { AddStudentStepTwo } from './add-student-step-two'
+import { formatStudentName } from './format-student-name'
 import { getTestStudentFormValues } from './test-data'
 import type {
   AddStudentFormValues,
@@ -16,10 +18,17 @@ import type {
 
 export type { AddStudentFormValues, AddressFields } from './types'
 
+type SubmittedEnrollment = {
+  studentId: string
+  studentName: string
+  enrollmentId?: string
+}
+
 type AddStudentModalProps = {
   isOpen: boolean
   onClose: () => void
-  onSubmit?: (values: AddStudentFormValues) => void
+  onSubmit?: (values: AddStudentFormValues) => string | undefined
+  onAssignSubjects?: (summary: SubmittedEnrollment) => void
 }
 
 const emptyAddress = (): AddressFields => ({
@@ -125,9 +134,17 @@ const validateContainer = (container: HTMLElement | null) => {
   return valid
 }
 
-export const AddStudentModal = ({ isOpen, onClose, onSubmit }: AddStudentModalProps) => {
+export const AddStudentModal = ({
+  isOpen,
+  onClose,
+  onSubmit,
+  onAssignSubjects,
+}: AddStudentModalProps) => {
   const [form, setForm] = useState<AddStudentFormValues>(emptyForm)
-  const [step, setStep] = useState<1 | 2 | 3 | 4>(1)
+  const [step, setStep] = useState<1 | 2 | 3 | 4 | 5>(1)
+  const [submittedEnrollment, setSubmittedEnrollment] = useState<SubmittedEnrollment | null>(
+    null
+  )
   const stepOneRef = useRef<HTMLDivElement>(null)
   const stepTwoRef = useRef<HTMLDivElement>(null)
 
@@ -135,6 +152,7 @@ export const AddStudentModal = ({ isOpen, onClose, onSubmit }: AddStudentModalPr
     if (!isOpen) {
       setForm(emptyForm())
       setStep(1)
+      setSubmittedEnrollment(null)
     }
   }, [isOpen])
 
@@ -274,7 +292,22 @@ export const AddStudentModal = ({ isOpen, onClose, onSubmit }: AddStudentModalPr
       return
     }
 
-    onSubmit?.(form)
+    const submittedId = onSubmit?.(form)
+    setSubmittedEnrollment({
+      studentId: submittedId ?? '001',
+      studentName: formatStudentName(form),
+    })
+    setStep(5)
+  }
+
+  const handleSuccessClose = () => {
+    onClose()
+  }
+
+  const handleAssignSubjects = () => {
+    if (submittedEnrollment) {
+      onAssignSubjects?.(submittedEnrollment)
+    }
     onClose()
   }
 
@@ -287,36 +320,47 @@ export const AddStudentModal = ({ isOpen, onClose, onSubmit }: AddStudentModalPr
     })
   }
 
+  const isSuccessStep = step === 5
+
   return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
       size="xl"
       showCloseButton={false}
-      className="add-student-modal"
+      className={`add-student-modal ${isSuccessStep ? 'add-student-modal--success' : ''}`}
     >
       <div className="add-student-modal__content">
         <button
           type="button"
-          onClick={onClose}
+          onClick={isSuccessStep ? handleSuccessClose : onClose}
           className="add-student-modal__close"
           aria-label="Close add student modal"
         >
           ×
         </button>
 
-        <div className="add-student-modal__header">
-          <h2 className="add-student-modal__title">Add Student</h2>
-          <button
-            type="button"
-            className="add-student-modal__test-btn"
-            onClick={() => setForm(getTestStudentFormValues())}
-          >
-            Fill Test Data
-          </button>
-        </div>
+        {isSuccessStep && submittedEnrollment ? (
+          <AddStudentStepSuccess
+            studentId={submittedEnrollment.studentId}
+            studentName={submittedEnrollment.studentName}
+            onClose={handleSuccessClose}
+            onAssignSubjects={handleAssignSubjects}
+          />
+        ) : (
+          <>
+            <div className="add-student-modal__header">
+              <h2 className="add-student-modal__title">Add Student</h2>
+              <button
+                type="button"
+                className="add-student-modal__test-btn"
+                onClick={() => setForm(getTestStudentFormValues())}
+              >
+                Fill Test Data
+              </button>
+            </div>
 
-        <form className="add-student-modal__form" onSubmit={handleSubmit}>
+            <form className="add-student-modal__form" onSubmit={handleSubmit}>
           {step === 1 && (
             <div ref={stepOneRef}>
               <AddStudentStepOne
@@ -380,7 +424,9 @@ export const AddStudentModal = ({ isOpen, onClose, onSubmit }: AddStudentModalPr
               </button>
             )}
           </div>
-        </form>
+            </form>
+          </>
+        )}
       </div>
     </Modal>
   )

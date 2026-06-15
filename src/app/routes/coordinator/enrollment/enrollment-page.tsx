@@ -5,19 +5,19 @@ import {
   PaginationControls,
 } from '../../../../components'
 import { AddStudentModal } from './add-student'
-
-type EnrollmentStatus = 'PENDING' | 'ENROLLED' | 'REJECTED'
-
-type EnrollmentRecord = {
-  id: string
-  name: string
-  studentId: string
-  gradeSection: string
-  enrollmentDate: string
-  status: EnrollmentStatus
-}
+import type { AddStudentFormValues } from './add-student'
+import { formatStudentName } from './add-student/format-student-name'
+import { ApproveStudentModal, formatGradeSectionLabel, getEnrollmentFormData } from './approve-student'
+import type { ApprovalDetails, EnrollmentRecord } from './types'
 
 type FilterId = 'all' | 'enrolled' | 'pending' | 'rejected'
+
+type ApproveModalContext = {
+  enrollmentId: string
+  studentId: string
+  studentName: string
+  form: AddStudentFormValues
+}
 
 const summaryCards = [
   { label: 'Total Students', value: '1,250' },
@@ -25,7 +25,7 @@ const summaryCards = [
   { label: 'Pending Enrollments', value: '12' },
 ]
 
-const enrollments: EnrollmentRecord[] = [
+const initialEnrollments: EnrollmentRecord[] = [
   {
     id: '1',
     name: 'Juan Aguilar',
@@ -74,15 +74,101 @@ const matchesFilter = (record: EnrollmentRecord, filter: FilterId) => {
   return record.status === 'REJECTED'
 }
 
+const formatEnrollmentDate = () => {
+  const now = new Date()
+  return `${now.getMonth() + 1}/${String(now.getDate()).padStart(2, '0')}/${now.getFullYear()}`
+}
+
+const buildGradeSection = (values: AddStudentFormValues, section: string) =>
+  `${formatGradeSectionLabel(values, section).replace(' – ', ' - Section ')}`
+
 export const EnrollmentPage = () => {
   const [activeFilter, setActiveFilter] = useState<FilterId>('pending')
   const [isAddStudentOpen, setIsAddStudentOpen] = useState(false)
-  const isPageDimmed = isAddStudentOpen
+  const [approveModalContext, setApproveModalContext] = useState<ApproveModalContext | null>(null)
+  const [enrollmentRecords, setEnrollmentRecords] = useState(initialEnrollments)
+  const isPageDimmed = isAddStudentOpen || approveModalContext !== null
 
   const filteredEnrollments = useMemo(
-    () => enrollments.filter((record) => matchesFilter(record, activeFilter)),
-    [activeFilter]
+    () => enrollmentRecords.filter((record) => matchesFilter(record, activeFilter)),
+    [activeFilter, enrollmentRecords]
   )
+
+  const openApproveModal = (enrollmentId: string) => {
+    const record = enrollmentRecords.find((item) => item.id === enrollmentId)
+
+    if (!record) {
+      return
+    }
+
+    setApproveModalContext({
+      enrollmentId,
+      studentId: record.studentId,
+      studentName: record.name,
+      form: getEnrollmentFormData(record),
+    })
+  }
+
+  const closeApproveModal = () => {
+    setApproveModalContext(null)
+  }
+
+  const handleAddStudentSubmit = (values: AddStudentFormValues) => {
+    const nextNumericId =
+      enrollmentRecords.reduce((max, record) => Math.max(max, Number(record.studentId)), 0) + 1
+    const studentId = String(nextNumericId).padStart(3, '0')
+    const gradeLabel = values.grade || values.seniorHighProgram || 'Grade'
+
+    setEnrollmentRecords((current) => [
+      {
+        id: crypto.randomUUID(),
+        name: formatStudentName(values),
+        studentId,
+        gradeSection: `${gradeLabel} - section not assigned`,
+        enrollmentDate: formatEnrollmentDate(),
+        status: 'PENDING',
+        formData: values,
+      },
+      ...current,
+    ])
+
+    return studentId
+  }
+
+  const handleAssignSubjects = ({
+    studentId,
+    enrollmentId,
+  }: {
+    studentId: string
+    studentName: string
+    enrollmentId?: string
+  }) => {
+    const recordId =
+      enrollmentId ??
+      enrollmentRecords.find((record) => record.studentId === studentId)?.id
+
+    if (recordId) {
+      openApproveModal(recordId)
+    }
+  }
+
+  const handleConfirmApproval = (details: ApprovalDetails) => {
+    if (!approveModalContext) {
+      return
+    }
+
+    setEnrollmentRecords((current) =>
+      current.map((record) =>
+        record.id === approveModalContext.enrollmentId
+          ? {
+              ...record,
+              status: 'ENROLLED',
+              gradeSection: buildGradeSection(approveModalContext.form, details.section),
+            }
+          : record
+      )
+    )
+  }
 
   return (
     <>
@@ -103,7 +189,7 @@ export const EnrollmentPage = () => {
         <section className="enrollment-list-card" aria-label="Enrollment list">
           <div className="enrollment-list-card__top">
             <h3>Enrollment List</h3>
-            <FilterChipGroup
+            <FilterChipGroup<FilterId>
               options={filterOptions}
               activeId={activeFilter}
               onChange={setActiveFilter}
@@ -142,7 +228,9 @@ export const EnrollmentPage = () => {
                     <td>
                       {record.status === 'PENDING' ? (
                         <div className="enrollment-actions">
-                          <button type="button">APPROVE</button>
+                          <button type="button" onClick={() => openApproveModal(record.id)}>
+                            APPROVE
+                          </button>
                           <span aria-hidden="true">|</span>
                           <button type="button">REJECT</button>
                         </div>
@@ -163,7 +251,20 @@ export const EnrollmentPage = () => {
       <AddStudentModal
         isOpen={isAddStudentOpen}
         onClose={() => setIsAddStudentOpen(false)}
+        onSubmit={handleAddStudentSubmit}
+        onAssignSubjects={handleAssignSubjects}
       />
+
+      {approveModalContext && (
+        <ApproveStudentModal
+          isOpen
+          onClose={closeApproveModal}
+          form={approveModalContext.form}
+          studentId={approveModalContext.studentId}
+          studentName={approveModalContext.studentName}
+          onConfirm={handleConfirmApproval}
+        />
+      )}
     </>
   )
 }
