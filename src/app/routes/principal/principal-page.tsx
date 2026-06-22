@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { AppSidebar, CalendarCard, DashboardSummaryCards, SegmentTabs } from '../../../components'
 import { RouteNavbar } from '../navbar'
+import { MonitorActivityPage } from './monitor-activity'
+import { LogsReportsPage } from './logs-reports'
 
 const sidebarItems = [
   { id: 'home', label: 'Home' },
@@ -70,9 +72,16 @@ export const PrincipalPage = () => {
 
       <div className="student-main">
         <RouteNavbar userName="Principal" />
-        <SegmentTabs items={topTabs} activeTabId="dashboard" ariaLabel="Principal top tabs" />
+        {activeSidebarItem === 'home' && (
+          <SegmentTabs items={topTabs} activeTabId="dashboard" ariaLabel="Principal top tabs" />
+        )}
 
         <main className="student-content principal-content">
+          {activeSidebarItem === 'monitor-activity' ? (
+            <MonitorActivityPage />
+          ) : activeSidebarItem === 'logs-reports' ? (
+            <LogsReportsPage />
+          ) : activeSidebarItem === 'home' ? (
           <section className="principal-main">
             <DashboardSummaryCards cards={summaryCards} />
 
@@ -153,9 +162,30 @@ export const PrincipalPage = () => {
               </div>
             </section>
           </section>
+          ) : null}
 
           <aside className="student-content__side">
-            <CalendarCard title="Calendar" />
+            <CalendarCard
+              title="Calendar"
+              month={
+                activeSidebarItem === 'monitor-activity' ||
+                activeSidebarItem === 'logs-reports'
+                  ? 1
+                  : undefined
+              }
+              year={
+                activeSidebarItem === 'monitor-activity' ||
+                activeSidebarItem === 'logs-reports'
+                  ? 2026
+                  : undefined
+              }
+              activeDay={
+                activeSidebarItem === 'monitor-activity' ||
+                activeSidebarItem === 'logs-reports'
+                  ? 14
+                  : undefined
+              }
+            />
             <section className="student-info-card">
               <h3>Announcement</h3>
               <p>Dear CNHS Community, Please be advised.</p>
