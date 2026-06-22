@@ -1224,6 +1224,185 @@ html {
   opacity: 0.5;
 }
 
+.teachers-page {
+  display: grid;
+  gap: 16px;
+}
+
+.teachers-header h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 33px;
+  letter-spacing: 0.02em;
+}
+
+.teachers-page .dashboard-summary-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.teachers-list-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 16px 23px 20px;
+}
+
+.teachers-list-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.teachers-list-card h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.teachers-list-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.teachers-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: min(323px, 100%);
+  height: 40px;
+  border: 1px solid #d9d9d9;
+  border-radius: 9999px;
+  background: #fff;
+  padding: 0 16px;
+}
+
+.teachers-search input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  line-height: 1;
+  color: #1e1e1e;
+}
+
+.teachers-search input::placeholder {
+  color: #b3b3b3;
+}
+
+.teachers-search span {
+  font-size: 16px;
+  color: #1e1e1e;
+}
+
+.teachers-filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  background: transparent;
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+}
+
+.teachers-table-wrap {
+  overflow-x: auto;
+}
+
+.teachers-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 880px;
+}
+
+.teachers-table th,
+.teachers-table td {
+  border: 1px solid #b9b9b9;
+  padding: 10px 12px;
+  font-size: 12px;
+  line-height: 1.3;
+  text-align: center;
+}
+
+.teachers-table th {
+  background: rgba(0, 0, 0, 0.06);
+  font-weight: 600;
+}
+
+.teachers-table__last-activity {
+  white-space: pre-line;
+}
+
+.teachers-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+}
+
+.teachers-status__dot {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.teachers-status--active .teachers-status__dot {
+  background: #24e13a;
+}
+
+.teachers-status--low-engagement .teachers-status__dot {
+  background: #efff0e;
+}
+
+.teachers-status--inactive .teachers-status__dot {
+  background: #fd0b0f;
+}
+
+.teachers-actions button {
+  border: none;
+  background: transparent;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.teachers-pagination {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.teachers-pagination__field {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.teachers-pagination__field select {
+  height: 42px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+  padding: 0 12px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
 .subjects-modal {
   max-width: min(1164px, calc(100vw - 32px));
   border-radius: 0;
@@ -3827,6 +4006,20 @@ html {
   }
 
   .subjects-pagination {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .teachers-page .dashboard-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .teachers-list-card__top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .teachers-pagination {
     flex-direction: column;
     align-items: flex-start;
   }

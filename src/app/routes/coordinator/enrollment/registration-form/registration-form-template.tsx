@@ -66,6 +66,7 @@ export const RegistrationFormTemplate = ({ data }: RegistrationFormTemplateProps
         <div className="registration-form__section-content">
           <ContactRow
             left={{ label: 'Parent/Guardian Name:', value: data.parentGuardianName }}
+            
           />
           <ContactRow
             left={{ label: 'Telephone No.:', value: data.telephone }}
