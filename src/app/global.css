@@ -708,6 +708,94 @@ html {
   line-height: 16px !important;
 }
 
+.teacher-sidebar-link {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  color: inherit;
+  cursor: pointer;
+}
+
+.to-grade-page {
+  display: grid;
+  gap: 16px;
+}
+
+.to-grade-header h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 33px;
+  letter-spacing: 0.02em;
+}
+
+.to-grade-table-card {
+  background: #fff;
+  border: 1px solid #b9b9b9;
+  border-radius: 10px;
+  padding: 16px 20px 20px;
+}
+
+.to-grade-table-card__toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 12px;
+}
+
+.to-grade-filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  background: transparent;
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+}
+
+.to-grade-table-wrap {
+  overflow-x: auto;
+}
+
+.to-grade-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px;
+}
+
+.to-grade-table th,
+.to-grade-table td {
+  border: 1px solid #b9b9b9;
+  padding: 10px 12px;
+  font-size: 12px;
+  line-height: 1.3;
+  text-align: center;
+}
+
+.to-grade-table th {
+  background: rgba(0, 0, 0, 0.06);
+  font-weight: 600;
+}
+
+.to-grade-table td:first-child {
+  text-align: left;
+}
+
+.to-grade-action-btn {
+  border: none;
+  background: transparent;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+
 .coordinator-content {
   grid-template-columns: minmax(0, 1fr) 371px;
 }
