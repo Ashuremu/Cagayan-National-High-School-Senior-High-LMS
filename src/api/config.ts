@@ -8,6 +8,7 @@ export const API_ENDPOINTS = {
   session: '/session',
   logout: '/logout',
   roles: '/roles',
+  users: '/users',
 } as const
 
 export function apiUrl(path: string): string {

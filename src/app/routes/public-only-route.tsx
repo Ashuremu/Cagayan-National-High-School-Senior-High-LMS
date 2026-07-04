@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react'
 import { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
-import { getSessionUser } from '../../../api/session/session-api'
+import { getSessionUser } from '../../api/session/session-api'
 import { getLandingPathForRole } from './role-landing'
 
 export const PublicOnlyRoute = ({ children }: PropsWithChildren) => {

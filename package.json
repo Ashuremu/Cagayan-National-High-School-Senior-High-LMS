@@ -13,6 +13,7 @@
     "@heroui/checkbox": "^2.3.32",
     "@heroui/input": "^2.4.33",
     "@heroui/select": "^2.4.33",
+    "@heroui/theme": "^2.4.26",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
     "react-router-dom": "^7.14.2"

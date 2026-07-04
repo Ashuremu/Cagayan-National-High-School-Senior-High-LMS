@@ -1,46 +1,64 @@
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { DashboardSummaryCards } from '../../../../components'
+import { fetchUsers, toManageUserRow } from '../../../../api/users/users-api'
+import type { CreateUserSuccess } from '../../../../api/users/users-api'
 import { CreateUserModal } from './create-user'
 import { EditUserModal } from './edit-user'
 import type { ManageUser } from './types'
 
-const summaryCards = [
-  { label: 'Total Users', value: '1,250' },
-  { label: 'Active Users', value: '85' },
-  { label: 'Recently Added Users', value: '3' },
-]
-
-const users: ManageUser[] = [
-  {
-    id: '10001045',
-    name: 'Park Santos',
-    role: 'Teacher',
-    email: 'park@lms.edu',
-    status: 'Active',
-    lastLogin: '28-Feb-26 08:30',
-  },
-  {
-    id: '10001046',
-    name: 'A Dela Cruz',
-    role: 'Student',
-    email: 'delacruz@lms.edu',
-    status: 'Inactive',
-    lastLogin: '23-Feb-26 08:30',
-  },
-  {
-    id: '10001047',
-    name: 'Sarah Cruz',
-    role: 'Student',
-    email: 'cruz@lms.edu',
-    status: 'Inactive',
-    lastLogin: '21-Feb-26 08:30',
-  },
-]
-
 export const ManageUsersPage = () => {
   const [isCreateUserOpen, setIsCreateUserOpen] = useState(false)
   const [editingUser, setEditingUser] = useState<ManageUser | null>(null)
+  const [users, setUsers] = useState<ManageUser[]>([])
+  const [isLoadingUsers, setIsLoadingUsers] = useState(true)
+  const [pageError, setPageError] = useState('')
+  const [successMessage, setSuccessMessage] = useState('')
   const isPageDimmed = isCreateUserOpen || editingUser !== null
+
+  const loadUsers = useCallback(async () => {
+    setIsLoadingUsers(true)
+    setPageError('')
+
+    const result = await fetchUsers()
+    if (!result.ok) {
+      setPageError(result.error.message)
+      setUsers([])
+      setIsLoadingUsers(false)
+      return
+    }
+
+    setUsers(result.data.users.map(toManageUserRow))
+    setIsLoadingUsers(false)
+  }, [])
+
+  useEffect(() => {
+    void loadUsers()
+  }, [loadUsers])
+
+  const handleUserCreated = (result: CreateUserSuccess) => {
+    void loadUsers()
+
+    if (result.temporaryPassword) {
+      setSuccessMessage(
+        `User ${result.user.name} created. Default password: ${result.temporaryPassword}`,
+      )
+      return
+    }
+
+    setSuccessMessage(`User ${result.user.name} created successfully.`)
+  }
+
+  const summaryCards = [
+    { label: 'Total Users', value: String(users.length) },
+    {
+      label: 'Active Users',
+      value: String(users.filter((user) => user.status === 'Active').length),
+    },
+    {
+      label: 'Recently Added Users',
+      value: String(Math.min(users.length, 3)),
+    },
+  ]
 
   return (
     <>
@@ -50,11 +68,26 @@ export const ManageUsersPage = () => {
           <button
             type="button"
             className="manage-users-add-btn"
-            onClick={() => setIsCreateUserOpen(true)}
+            onClick={() => {
+              setSuccessMessage('')
+              setIsCreateUserOpen(true)
+            }}
           >
             Add New User
           </button>
         </div>
+
+        {successMessage ? (
+          <p className="manage-users-success" role="status">
+            {successMessage}
+          </p>
+        ) : null}
+
+        {pageError ? (
+          <p className="manage-users-error" role="alert">
+            {pageError}
+          </p>
+        ) : null}
 
         <DashboardSummaryCards cards={summaryCards} />
 
@@ -86,24 +119,34 @@ export const ManageUsersPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {users.map((user) => (
-                  <tr key={user.id}>
-                    <td>{user.name}</td>
-                    <td>{user.role}</td>
-                    <td>{user.email}</td>
-                    <td>{user.status}</td>
-                    <td>{user.lastLogin}</td>
-                    <td>
-                      <button
-                        type="button"
-                        className="manage-users-edit-btn"
-                        onClick={() => setEditingUser(user)}
-                      >
-                        EDIT
-                      </button>
-                    </td>
+                {isLoadingUsers ? (
+                  <tr>
+                    <td colSpan={6}>Loading users...</td>
                   </tr>
-                ))}
+                ) : users.length === 0 ? (
+                  <tr>
+                    <td colSpan={6}>No users found.</td>
+                  </tr>
+                ) : (
+                  users.map((user) => (
+                    <tr key={user.id}>
+                      <td>{user.name}</td>
+                      <td>{user.role}</td>
+                      <td>{user.email}</td>
+                      <td>{user.status}</td>
+                      <td>{user.lastLogin}</td>
+                      <td>
+                        <button
+                          type="button"
+                          className="manage-users-edit-btn"
+                          onClick={() => setEditingUser(user)}
+                        >
+                          EDIT
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
@@ -132,6 +175,7 @@ export const ManageUsersPage = () => {
       <CreateUserModal
         isOpen={isCreateUserOpen}
         onClose={() => setIsCreateUserOpen(false)}
+        onCreated={handleUserCreated}
       />
 
       <EditUserModal

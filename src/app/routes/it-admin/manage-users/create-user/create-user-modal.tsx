@@ -1,5 +1,8 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import Modal from '../../../../../components/Modal'
+import { createUserWithBackend } from '../../../../../api/users/users-api'
+import { fetchRoles, type RoleOption } from '../../../../../api/roles/roles-api'
+import type { CreateUserSuccess } from '../../../../../api/users/users-api'
 
 export type CreateUserFormValues = {
   firstName: string
@@ -13,18 +16,8 @@ export type CreateUserFormValues = {
 type CreateUserModalProps = {
   isOpen: boolean
   onClose: () => void
-  onSubmit?: (values: CreateUserFormValues) => void
+  onCreated?: (result: CreateUserSuccess) => void
 }
-
-const roleOptions = [
-  { value: '', label: 'Select role' },
-  { value: 'student', label: 'Student' },
-  { value: 'teacher', label: 'Teacher' },
-  { value: 'parent', label: 'Parent' },
-  { value: 'coordinator', label: 'Coordinator' },
-  { value: 'it-admin', label: 'IT Admin' },
-  { value: 'principal', label: 'Principal' },
-]
 
 const emptyForm: CreateUserFormValues = {
   firstName: '',
@@ -35,14 +28,37 @@ const emptyForm: CreateUserFormValues = {
   role: '',
 }
 
-export const CreateUserModal = ({ isOpen, onClose, onSubmit }: CreateUserModalProps) => {
+export const CreateUserModal = ({ isOpen, onClose, onCreated }: CreateUserModalProps) => {
   const [form, setForm] = useState<CreateUserFormValues>(emptyForm)
   const [noSuffix, setNoSuffix] = useState(false)
+  const [roleOptions, setRoleOptions] = useState<RoleOption[]>([])
+  const [isLoadingRoles, setIsLoadingRoles] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
 
   useEffect(() => {
     if (!isOpen) {
       setForm(emptyForm)
       setNoSuffix(false)
+      setErrorMessage('')
+      return
+    }
+
+    let isMounted = true
+    setIsLoadingRoles(true)
+
+    void fetchRoles().then((result) => {
+      if (!isMounted) return
+      if (result.ok) {
+        setRoleOptions(result.data.roles)
+      } else {
+        setErrorMessage(result.error.message)
+      }
+      setIsLoadingRoles(false)
+    })
+
+    return () => {
+      isMounted = false
     }
   }, [isOpen])
 
@@ -50,12 +66,24 @@ export const CreateUserModal = ({ isOpen, onClose, onSubmit }: CreateUserModalPr
     setForm((prev) => ({ ...prev, [field]: value }))
   }
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    onSubmit?.({
+    setErrorMessage('')
+    setIsSubmitting(true)
+
+    const result = await createUserWithBackend({
       ...form,
       suffix: noSuffix ? '' : form.suffix,
     })
+
+    setIsSubmitting(false)
+
+    if (!result.ok) {
+      setErrorMessage(result.error.message)
+      return
+    }
+
+    onCreated?.(result.data)
     onClose()
   }
 
@@ -148,19 +176,29 @@ export const CreateUserModal = ({ isOpen, onClose, onSubmit }: CreateUserModalPr
             <select
               required
               value={form.role}
+              disabled={isLoadingRoles}
               onChange={(e) => updateField('role', e.target.value)}
             >
+              <option value="">
+                {isLoadingRoles ? 'Loading roles...' : 'Select role'}
+              </option>
               {roleOptions.map((option) => (
-                <option key={option.value || 'placeholder'} value={option.value}>
+                <option key={option.id} value={option.code}>
                   {option.label}
                 </option>
               ))}
             </select>
           </label>
 
+          {errorMessage ? (
+            <p className="create-user-modal__error" role="alert">
+              {errorMessage}
+            </p>
+          ) : null}
+
           <div className="create-user-modal__actions">
-            <button type="submit" className="create-user-modal__submit">
-              Submit
+            <button type="submit" className="create-user-modal__submit" disabled={isSubmitting}>
+              {isSubmitting ? 'Creating...' : 'Submit'}
             </button>
             <button type="button" className="create-user-modal__cancel" onClick={onClose}>
               Cancel
