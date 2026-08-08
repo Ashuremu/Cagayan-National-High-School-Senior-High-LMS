@@ -2,6 +2,7 @@ import { useState } from 'react'
 import SDO from '../../../assets/SDO.png'
 import { AppSidebar, CalendarCard, SegmentTabs, SubjectSidebarOptions } from '../../../components'
 import { RouteNavbar } from '../navbar'
+import { ActiveActivitiesPage } from './active-activities'
 import { ToGradePage } from './to-grade'
 
 const sidebarItems = [
@@ -14,9 +15,11 @@ const topTabs = [
   { id: 'news', label: 'News' },
 ]
 
+type HomeView = 'dashboard' | 'to-grade' | 'active-activities'
+
 export const TeacherPage = () => {
   const [activeSidebarItem, setActiveSidebarItem] = useState('home')
-  const [homeView, setHomeView] = useState<'dashboard' | 'to-grade'>('dashboard')
+  const [homeView, setHomeView] = useState<HomeView>('dashboard')
 
   const handleSidebarClick = (itemId: string) => {
     setActiveSidebarItem(itemId)
@@ -26,7 +29,7 @@ export const TeacherPage = () => {
     }
   }
 
-  const showToGradeView = activeSidebarItem === 'home' && homeView === 'to-grade'
+  const showHomeSubView = activeSidebarItem === 'home' && homeView !== 'dashboard'
 
   return (
     <div className="student-layout">
@@ -48,8 +51,10 @@ export const TeacherPage = () => {
           <section className="student-content__main">
             {activeSidebarItem === 'subjects' ? <SubjectSidebarOptions /> : null}
 
-            {showToGradeView ? (
+            {homeView === 'to-grade' && activeSidebarItem === 'home' ? (
               <ToGradePage />
+            ) : homeView === 'active-activities' && activeSidebarItem === 'home' ? (
+              <ActiveActivitiesPage />
             ) : (
               <>
                 <div className="student-hero">
@@ -72,17 +77,24 @@ export const TeacherPage = () => {
           <aside className="student-content__side">
             <CalendarCard
               title="Calendar"
-              month={showToGradeView ? 1 : undefined}
-              year={showToGradeView ? 2026 : undefined}
-              activeDay={showToGradeView ? 14 : undefined}
+              month={showHomeSubView ? 1 : undefined}
+              year={showHomeSubView ? 2026 : undefined}
+              activeDay={showHomeSubView ? 14 : undefined}
             />
 
             <section className="student-info-card">
               <h3>Active Activities</h3>
-              <p>
+              <button
+                type="button"
+                className="teacher-sidebar-link"
+                onClick={() => {
+                  setActiveSidebarItem('home')
+                  setHomeView('active-activities')
+                }}
+              >
                 1 Assignment 02{' '}
                 <span className="teacher-status-pill teacher-status-pill--green">2 Submitted</span>
-              </p>
+              </button>
               <p className="teacher-card-subtext">
                 Oral Communication Nature & Elements of Communication
               </p>
