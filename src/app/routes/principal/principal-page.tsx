@@ -71,7 +71,7 @@ export const PrincipalPage = () => {
       />
 
       <div className="student-main">
-        <RouteNavbar userName="Principal" />
+        <RouteNavbar />
         {activeSidebarItem === 'home' && (
           <SegmentTabs items={topTabs} activeTabId="dashboard" ariaLabel="Principal top tabs" />
         )}

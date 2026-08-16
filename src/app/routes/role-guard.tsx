@@ -3,14 +3,22 @@ import { Navigate } from 'react-router-dom'
 import { useSession } from '../session-context'
 import { getLandingPathForRole } from './role-landing'
 
-export const PublicOnlyRoute = ({ children }: PropsWithChildren) => {
+type RoleGuardProps = PropsWithChildren<{
+  allowedRole: string
+}>
+
+export const RoleGuard = ({ allowedRole, children }: RoleGuardProps) => {
   const { user, isLoading } = useSession()
 
   if (isLoading) {
     return null
   }
 
-  if (user) {
+  if (!user) {
+    return <Navigate to="/" replace />
+  }
+
+  if (user.role !== allowedRole) {
     return <Navigate to={getLandingPathForRole(user.role ?? '')} replace />
   }
 

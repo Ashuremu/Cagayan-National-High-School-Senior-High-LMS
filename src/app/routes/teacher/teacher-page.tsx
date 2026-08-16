@@ -41,7 +41,7 @@ export const TeacherPage = () => {
       />
 
       <div className="student-main">
-        <RouteNavbar userName="Teacher Park" />
+        <RouteNavbar />
 
         {activeSidebarItem === 'home' && homeView === 'dashboard' && (
           <SegmentTabs items={topTabs} activeTabId="dashboard" ariaLabel="Teacher top tabs" />

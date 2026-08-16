@@ -26,6 +26,18 @@ export type CreateUserRequest = {
   password?: string
 }
 
+export type UpdateUserRequest = {
+  firstName?: string
+  middleName?: string
+  lastName?: string
+  suffix?: string
+  email?: string
+  role?: string
+  status?: string
+  password?: string
+  resetPasswordDefault?: boolean
+}
+
 export type CreateUserSuccess = {
   user: ManageUserRecord
   temporaryPassword: string | null
@@ -43,6 +55,10 @@ export type CreateUserResult =
 
 export type UsersListResult =
   | { ok: true; data: UsersListSuccess }
+  | { ok: false; error: ApiError }
+
+export type UpdateUserResult =
+  | { ok: true; data: CreateUserSuccess }
   | { ok: false; error: ApiError }
 
 export async function createUserWithBackend(payload: CreateUserRequest): Promise<CreateUserResult> {
@@ -97,6 +113,36 @@ export async function fetchUsers(): Promise<UsersListResult> {
   }
 }
 
+export async function updateUserWithBackend(
+  userId: string,
+  payload: UpdateUserRequest,
+): Promise<UpdateUserResult> {
+  try {
+    const response = await fetch(apiUrl(`${API_ENDPOINTS.users}/${userId}`), {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      ...defaultFetchOptions,
+      body: JSON.stringify(payload),
+    })
+
+    const body = await response.json()
+
+    if (!response.ok) {
+      return {
+        ok: false,
+        error: { message: body.message ?? 'Failed to update user.' },
+      }
+    }
+
+    return { ok: true, data: body as CreateUserSuccess }
+  } catch {
+    return {
+      ok: false,
+      error: { message: 'Cannot connect to backend API. Please try again.' },
+    }
+  }
+}
+
 function formatLastLogin(value: string | null): string {
   if (!value) return '—'
   const date = new Date(value)
@@ -114,7 +160,12 @@ export function toManageUserRow(user: ManageUserRecord) {
   return {
     id: user.uid,
     name: user.name,
+    firstName: user.firstName ?? '',
+    middleName: user.middleName ?? '',
+    lastName: user.lastName ?? '',
+    suffix: user.suffix ?? '',
     role: user.role ?? '—',
+    roleId: user.roleId ?? '',
     email: user.email,
     status: user.status,
     lastLogin: formatLastLogin(user.lastLogin),

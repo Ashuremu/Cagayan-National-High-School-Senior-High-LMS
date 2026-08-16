@@ -1,10 +1,16 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import Modal from '../../../../../components/Modal'
+import { updateUserWithBackend } from '../../../../../api/users/users-api'
+import type { CreateUserSuccess } from '../../../../../api/users/users-api'
+import { fetchRoles, type RoleOption } from '../../../../../api/roles/roles-api'
 import type { ManageUser } from '../types'
 
 export type EditUserFormValues = {
-  name: string
-  role: string
+  firstName: string
+  middleName: string
+  lastName: string
+  suffix: string
+  roleId: string
   status: string
   email: string
   password: string
@@ -16,32 +22,49 @@ type EditUserModalProps = {
   isOpen: boolean
   user: ManageUser | null
   onClose: () => void
-  onSubmit?: (userId: string, values: EditUserFormValues) => void
+  onUpdated?: (result: CreateUserSuccess) => void
 }
 
-const roleOptions = ['Student', 'Teacher', 'Parent', 'Coordinator', 'IT Admin', 'Principal']
 const statusOptions = ['Active', 'Inactive']
 
 const buildFormFromUser = (user: ManageUser): EditUserFormValues => ({
-  name: user.name,
-  role: user.role,
-  status: user.status,
+  firstName: user.firstName,
+  middleName: user.middleName,
+  lastName: user.lastName,
+  suffix: user.suffix,
+  roleId: user.roleId || user.role,
+  status: user.status === 'Inactive' ? 'Inactive' : 'Active',
   email: user.email,
-  password: '********',
-  confirmPassword: '********',
+  password: '',
+  confirmPassword: '',
   resetPasswordDefault: false,
 })
 
-export const EditUserModal = ({ isOpen, user, onClose, onSubmit }: EditUserModalProps) => {
-  const [form, setForm] = useState<EditUserFormValues | null>(null)
+export const EditUserModal = ({ isOpen, user, onClose, onUpdated }: EditUserModalProps) => {
+  const [form, setForm] = useState<EditUserFormValues | null>(() =>
+    isOpen && user ? buildFormFromUser(user) : null,
+  )
+  const [roleOptions, setRoleOptions] = useState<RoleOption[]>([])
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
 
   useEffect(() => {
-    if (isOpen && user) {
-      setForm(buildFormFromUser(user))
-    } else if (!isOpen) {
-      setForm(null)
+    if (!isOpen) return
+
+    let isMounted = true
+    void fetchRoles().then((result) => {
+      if (!isMounted) return
+      if (result.ok) {
+        setRoleOptions(result.data.roles)
+      } else {
+        setErrorMessage(result.error.message)
+      }
+    })
+
+    return () => {
+      isMounted = false
     }
-  }, [isOpen, user])
+  }, [isOpen])
 
   if (!isOpen || !user || !form) {
     return null
@@ -54,9 +77,48 @@ export const EditUserModal = ({ isOpen, user, onClose, onSubmit }: EditUserModal
     setForm((prev) => (prev ? { ...prev, [field]: value } : prev))
   }
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    onSubmit?.(user.id, form)
+
+    if (!form.firstName.trim() || !form.middleName.trim() || !form.lastName.trim()) {
+      setErrorMessage('First name, middle name, and last name are required.')
+      return
+    }
+
+    if (form.password !== form.confirmPassword) {
+      setErrorMessage('Passwords do not match.')
+      return
+    }
+
+    if (form.password && form.password.length < 8) {
+      setErrorMessage('Password must be at least 8 characters.')
+      return
+    }
+
+    setIsSubmitting(true)
+    setErrorMessage('')
+
+    const result = await updateUserWithBackend(user.id, {
+      firstName: form.firstName,
+      middleName: form.middleName,
+      lastName: form.lastName,
+      suffix: form.suffix || undefined,
+      role: form.roleId,
+      status: form.status === 'Inactive' ? 'inactive' : 'active',
+      email: form.email,
+      ...(form.resetPasswordDefault
+        ? { resetPasswordDefault: true }
+        : { password: form.password || undefined }),
+    })
+
+    setIsSubmitting(false)
+
+    if (!result.ok) {
+      setErrorMessage(result.error.message)
+      return
+    }
+
+    onUpdated?.(result.data)
     onClose()
   }
 
@@ -81,28 +143,67 @@ export const EditUserModal = ({ isOpen, user, onClose, onSubmit }: EditUserModal
         <h2 className="edit-user-modal__title">Update User Account</h2>
         <p className="edit-user-modal__user-id">User ID: {user.id}</p>
 
+        {errorMessage ? (
+          <p className="manage-users-error" role="alert">
+            {errorMessage}
+          </p>
+        ) : null}
+
         <form className="edit-user-modal__form" onSubmit={handleSubmit}>
-          <label className="edit-user-modal__field">
-            <span>Name</span>
-            <input
-              type="text"
-              required
-              value={form.name}
-              onChange={(e) => updateField('name', e.target.value)}
-            />
-          </label>
+          <div className="edit-user-modal__row">
+            <label className="edit-user-modal__field">
+              <span>First Name *</span>
+              <input
+                type="text"
+                required
+                value={form.firstName}
+                onChange={(e) => updateField('firstName', e.target.value)}
+              />
+            </label>
+
+            <label className="edit-user-modal__field">
+              <span>Middle Name *</span>
+              <input
+                type="text"
+                required
+                value={form.middleName}
+                onChange={(e) => updateField('middleName', e.target.value)}
+              />
+            </label>
+          </div>
+
+          <div className="edit-user-modal__row">
+            <label className="edit-user-modal__field">
+              <span>Last Name *</span>
+              <input
+                type="text"
+                required
+                value={form.lastName}
+                onChange={(e) => updateField('lastName', e.target.value)}
+              />
+            </label>
+
+            <label className="edit-user-modal__field">
+              <span>Suffix</span>
+              <input
+                type="text"
+                value={form.suffix}
+                onChange={(e) => updateField('suffix', e.target.value)}
+              />
+            </label>
+          </div>
 
           <div className="edit-user-modal__row">
             <label className="edit-user-modal__field">
               <span>Role *</span>
               <select
                 required
-                value={form.role}
-                onChange={(e) => updateField('role', e.target.value)}
+                value={form.roleId}
+                onChange={(e) => updateField('roleId', e.target.value)}
               >
                 {roleOptions.map((role) => (
-                  <option key={role} value={role}>
-                    {role}
+                  <option key={role.code} value={role.code}>
+                    {role.label}
                   </option>
                 ))}
               </select>
@@ -143,14 +244,10 @@ export const EditUserModal = ({ isOpen, user, onClose, onSubmit }: EditUserModal
               <span>Password</span>
               <input
                 type="password"
+                placeholder="Leave blank to keep current password"
                 value={form.resetPasswordDefault ? '' : form.password}
                 disabled={form.resetPasswordDefault}
                 onChange={(e) => updateField('password', e.target.value)}
-                onFocus={() => {
-                  if (form.password === '********') {
-                    updateField('password', '')
-                  }
-                }}
               />
             </label>
 
@@ -158,14 +255,10 @@ export const EditUserModal = ({ isOpen, user, onClose, onSubmit }: EditUserModal
               <span>Confirm Password</span>
               <input
                 type="password"
+                placeholder="Re-enter new password"
                 value={form.resetPasswordDefault ? '' : form.confirmPassword}
                 disabled={form.resetPasswordDefault}
                 onChange={(e) => updateField('confirmPassword', e.target.value)}
-                onFocus={() => {
-                  if (form.confirmPassword === '********') {
-                    updateField('confirmPassword', '')
-                  }
-                }}
               />
             </label>
           </div>
@@ -180,10 +273,15 @@ export const EditUserModal = ({ isOpen, user, onClose, onSubmit }: EditUserModal
           </label>
 
           <div className="edit-user-modal__actions">
-            <button type="submit" className="edit-user-modal__submit">
-              Update Changes
+            <button type="submit" className="edit-user-modal__submit" disabled={isSubmitting}>
+              {isSubmitting ? 'Updating...' : 'Update Changes'}
             </button>
-            <button type="button" className="edit-user-modal__cancel" onClick={onClose}>
+            <button
+              type="button"
+              className="edit-user-modal__cancel"
+              onClick={onClose}
+              disabled={isSubmitting}
+            >
               Cancel
             </button>
           </div>

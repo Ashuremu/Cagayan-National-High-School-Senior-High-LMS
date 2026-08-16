@@ -7,11 +7,13 @@ export { logoutWithBackend } from './logout/logout-api'
 export type { LogoutResult } from './logout/logout-api'
 export { fetchRoles } from './roles/roles-api'
 export type { RoleOption, RolesResult } from './roles/roles-api'
-export { createUserWithBackend, fetchUsers, toManageUserRow } from './users/users-api'
+export { createUserWithBackend, fetchUsers, toManageUserRow, updateUserWithBackend } from './users/users-api'
 export type {
   CreateUserRequest,
   CreateUserResult,
   CreateUserSuccess,
   ManageUserRecord,
+  UpdateUserRequest,
+  UpdateUserResult,
   UsersListResult,
 } from './users/users-api'

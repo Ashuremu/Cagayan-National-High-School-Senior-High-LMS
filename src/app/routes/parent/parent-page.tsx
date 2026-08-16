@@ -26,7 +26,7 @@ export const ParentPage = () => {
       />
 
       <div className="student-main">
-        <RouteNavbar userName="Parent Dela Cruz" />
+        <RouteNavbar />
 
         <SegmentTabs items={topTabs} activeTabId="dashboard" ariaLabel="Parent top tabs" />
 

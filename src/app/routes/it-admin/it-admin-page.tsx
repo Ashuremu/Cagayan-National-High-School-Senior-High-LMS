@@ -58,7 +58,7 @@ export const ItAdminPage = () => {
       />
 
       <div className="student-main">
-        <RouteNavbar userName="IT Admin" />
+        <RouteNavbar />
         {activeSidebarItem === 'home' && (
           <SegmentTabs items={topTabs} activeTabId="dashboard" ariaLabel="IT Admin top tabs" />
         )}

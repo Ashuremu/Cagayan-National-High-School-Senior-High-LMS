@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { DashboardSummaryCards } from '../../../../components'
 import { fetchUsers, toManageUserRow } from '../../../../api/users/users-api'
 import type { CreateUserSuccess } from '../../../../api/users/users-api'
@@ -13,6 +13,9 @@ export const ManageUsersPage = () => {
   const [isLoadingUsers, setIsLoadingUsers] = useState(true)
   const [pageError, setPageError] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
+  const [searchQuery, setSearchQuery] = useState('')
+  const [itemsPerPage, setItemsPerPage] = useState(10)
+  const [currentPage, setCurrentPage] = useState(1)
   const isPageDimmed = isCreateUserOpen || editingUser !== null
 
   const loadUsers = useCallback(async () => {
@@ -32,8 +35,21 @@ export const ManageUsersPage = () => {
   }, [])
 
   useEffect(() => {
-    void loadUsers()
-  }, [loadUsers])
+    let isMounted = true
+    void fetchUsers().then((result) => {
+      if (!isMounted) return
+      if (result.ok) {
+        setUsers(result.data.users.map(toManageUserRow))
+      } else {
+        setPageError(result.error.message)
+        setUsers([])
+      }
+      setIsLoadingUsers(false)
+    })
+    return () => {
+      isMounted = false
+    }
+  }, [])
 
   const handleUserCreated = (result: CreateUserSuccess) => {
     void loadUsers()
@@ -47,6 +63,34 @@ export const ManageUsersPage = () => {
 
     setSuccessMessage(`User ${result.user.name} created successfully.`)
   }
+
+  const handleUserUpdated = (result: CreateUserSuccess) => {
+    void loadUsers()
+
+    if (result.temporaryPassword) {
+      setSuccessMessage(
+        `User ${result.user.name} updated. Temporary password: ${result.temporaryPassword}`,
+      )
+      return
+    }
+
+    setSuccessMessage(`User ${result.user.name} updated successfully.`)
+  }
+
+  const filteredUsers = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase()
+    if (!query) return users
+    return users.filter((user) =>
+      [user.name, user.role, user.email, user.status, user.lastLogin]
+        .filter(Boolean)
+        .some((value) => value.toLowerCase().includes(query)),
+    )
+  }, [users, searchQuery])
+
+  const totalPages = Math.max(1, Math.ceil(filteredUsers.length / itemsPerPage))
+  const safePage = Math.min(currentPage, totalPages)
+  const pageStart = (safePage - 1) * itemsPerPage
+  const pageUsers = filteredUsers.slice(pageStart, pageStart + itemsPerPage)
 
   const summaryCards = [
     { label: 'Total Users', value: String(users.length) },
@@ -96,7 +140,16 @@ export const ManageUsersPage = () => {
             <h3>User List</h3>
             <div className="manage-users-list-toolbar">
               <label className="manage-users-search">
-                <input type="search" placeholder="Search" aria-label="Search users" />
+                <input
+                  type="search"
+                  placeholder="Search"
+                  aria-label="Search users"
+                  value={searchQuery}
+                  onChange={(event) => {
+                    setSearchQuery(event.target.value)
+                    setCurrentPage(1)
+                  }}
+                />
                 <span aria-hidden="true">⌕</span>
               </label>
               <button type="button" className="manage-users-filter-btn">
@@ -123,12 +176,12 @@ export const ManageUsersPage = () => {
                   <tr>
                     <td colSpan={6}>Loading users...</td>
                   </tr>
-                ) : users.length === 0 ? (
+                ) : filteredUsers.length === 0 ? (
                   <tr>
                     <td colSpan={6}>No users found.</td>
                   </tr>
                 ) : (
-                  users.map((user) => (
+                  pageUsers.map((user) => (
                     <tr key={user.id}>
                       <td>{user.name}</td>
                       <td>{user.role}</td>
@@ -154,20 +207,39 @@ export const ManageUsersPage = () => {
           <div className="manage-users-pagination">
             <label className="manage-users-pagination__field">
               <span>Items</span>
-              <select defaultValue="10" aria-label="Items per page">
+              <select
+                value={itemsPerPage}
+                aria-label="Items per page"
+                onChange={(event) => {
+                  setItemsPerPage(Number(event.target.value))
+                  setCurrentPage(1)
+                }}
+              >
                 <option value="10">10</option>
                 <option value="25">25</option>
                 <option value="50">50</option>
               </select>
             </label>
 
-            <label className="manage-users-pagination__field">
-              <span>Page</span>
-              <select defaultValue="1" aria-label="Current page">
-                <option value="1">1</option>
-              </select>
-              <span>of 1</span>
-            </label>
+            <div className="manage-users-pagination__field">
+              <button
+                type="button"
+                aria-label="Previous page"
+                disabled={safePage === 1}
+                onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
+              >
+                ‹
+              </button>
+              <span>Page {safePage} of {totalPages}</span>
+              <button
+                type="button"
+                aria-label="Next page"
+                disabled={safePage === totalPages}
+                onClick={() => setCurrentPage((page) => Math.min(totalPages, page + 1))}
+              >
+                ›
+              </button>
+            </div>
           </div>
         </section>
       </section>
@@ -179,9 +251,11 @@ export const ManageUsersPage = () => {
       />
 
       <EditUserModal
+        key={editingUser ? `open-${editingUser.id}` : 'closed'}
         isOpen={editingUser !== null}
         user={editingUser}
         onClose={() => setEditingUser(null)}
+        onUpdated={handleUserUpdated}
       />
     </>
   )

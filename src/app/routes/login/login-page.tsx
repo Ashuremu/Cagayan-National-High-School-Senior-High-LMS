@@ -5,6 +5,7 @@ import Modal from '../../../components/Modal'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { loginWithBackend } from '../../../api/login/login-api'
+import { useSession } from '../../session-context'
 import { getLandingPathForRole } from '../role-landing'
 
 const highlights = [
@@ -54,6 +55,7 @@ export const LoginPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const navigate = useNavigate()
+  const { refresh } = useSession()
 
   const handleUseMockCredentials = (mockEmail: string, mockPassword: string) => {
     setEmail(mockEmail)
@@ -70,11 +72,12 @@ export const LoginPage = () => {
     try {
       const result = await loginWithBackend({ email, password })
       if (!result.ok) {
-        setErrorMessage((result as { error: { message: string } }).error.message)
+        setErrorMessage(result.error.message)
         return
       }
 
       setIsLoginModalOpen(false)
+      await refresh()
       navigate(getLandingPathForRole(result.data.user.role ?? ''))
     } catch {
       setErrorMessage('Cannot connect to server. Please try again.')
@@ -174,28 +177,30 @@ export const LoginPage = () => {
             ) : null}
           </form>
 
-          <section className="mock-credentials" aria-label="Mock login credentials">
-            <h3>Mock Credentials For Testing</h3>
-            <ul>
-              {mockCredentials.map((credential) => (
-                <li key={credential.role}>
-                  <div>
-                    <strong>{credential.role}</strong>
-                    <span>{credential.email}</span>
-                    <span>{credential.password}</span>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      handleUseMockCredentials(credential.email, credential.password)
-                    }
-                  >
-                    Use
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </section>
+          {import.meta.env.DEV && (
+            <section className="mock-credentials" aria-label="Mock login credentials">
+              <h3>Mock Credentials For Testing</h3>
+              <ul>
+                {mockCredentials.map((credential) => (
+                  <li key={credential.role}>
+                    <div>
+                      <strong>{credential.role}</strong>
+                      <span>{credential.email}</span>
+                      <span>{credential.password}</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleUseMockCredentials(credential.email, credential.password)
+                      }
+                    >
+                      Use
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
         </div>
       </Modal>
     </div>

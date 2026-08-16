@@ -4,11 +4,14 @@ import './index.css'
 import './app/global.css'
 import { App } from './app/app'
 import { AppProvider } from './app/provider'
+import { SessionProvider } from './app/session-provider'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <AppProvider>
-      <App />
+      <SessionProvider>
+        <App />
+      </SessionProvider>
     </AppProvider>
   </StrictMode>,
 )

@@ -26,7 +26,7 @@ export const StudentPage = () => {
       />
 
       <div className="student-main">
-        <RouteNavbar userName="A Dela Cruz" />
+        <RouteNavbar />
 
         <SegmentTabs
               items={topTabs}

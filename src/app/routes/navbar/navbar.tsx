@@ -1,16 +1,15 @@
 import { useNavigate } from 'react-router-dom'
 import { UserProfileMenu } from '../../../components'
 import { logoutWithBackend } from '../../../api/logout/logout-api'
+import { useSession } from '../../session-context'
 
-type RouteNavbarProps = {
-  userName: string
-}
-
-export const RouteNavbar = ({ userName }: RouteNavbarProps) => {
+export const RouteNavbar = () => {
   const navigate = useNavigate()
+  const { user, refresh } = useSession()
 
   const handleLogout = async () => {
     await logoutWithBackend()
+    await refresh()
     navigate('/', { replace: true })
   }
 
@@ -28,7 +27,7 @@ export const RouteNavbar = ({ userName }: RouteNavbarProps) => {
         <button type="button" className="app-icon-btn" aria-label="Messages">
           ✉
         </button>
-        <UserProfileMenu userName={userName} onLogoutClick={handleLogout} />
+        <UserProfileMenu userName={user?.name ?? 'User'} onLogoutClick={handleLogout} />
       </div>
     </header>
   )

@@ -1,28 +1,15 @@
 import type { PropsWithChildren } from 'react'
-import { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
-import { checkAuthenticated } from '../../api/session/session-api'
+import { useSession } from '../session-context'
 
 export const ProtectedRoute = ({ children }: PropsWithChildren) => {
-  const [status, setStatus] = useState<'loading' | 'allowed' | 'blocked'>('loading')
+  const { user, isLoading } = useSession()
 
-  useEffect(() => {
-    let isMounted = true
-    void checkAuthenticated().then((isAllowed) => {
-      if (!isMounted) return
-      setStatus(isAllowed ? 'allowed' : 'blocked')
-    })
-
-    return () => {
-      isMounted = false
-    }
-  }, [])
-
-  if (status === 'loading') {
+  if (isLoading) {
     return null
   }
 
-  if (status === 'blocked') {
+  if (!user) {
     return <Navigate to="/" replace />
   }
 

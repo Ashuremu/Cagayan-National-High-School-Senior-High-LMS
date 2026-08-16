@@ -6,6 +6,7 @@ import { ParentRoute } from './parent'
 import { PrincipalRoute } from './principal'
 import { ProtectedRoute } from './protected-route'
 import { PublicOnlyRoute } from './public-only-route'
+import { RoleGuard } from './role-guard'
 import { StudentRoute } from './student'
 import { TeacherRoute } from './teacher'
 
@@ -22,7 +23,9 @@ export const appRoutes: RouteObject[] = [
     path: '/student',
     element: (
       <ProtectedRoute>
-        <StudentRoute />
+        <RoleGuard allowedRole="Student">
+          <StudentRoute />
+        </RoleGuard>
       </ProtectedRoute>
     ),
   },
@@ -30,7 +33,9 @@ export const appRoutes: RouteObject[] = [
     path: '/teacher',
     element: (
       <ProtectedRoute>
-        <TeacherRoute />
+        <RoleGuard allowedRole="Teacher">
+          <TeacherRoute />
+        </RoleGuard>
       </ProtectedRoute>
     ),
   },
@@ -38,7 +43,9 @@ export const appRoutes: RouteObject[] = [
     path: '/parent',
     element: (
       <ProtectedRoute>
-        <ParentRoute />
+        <RoleGuard allowedRole="Parent">
+          <ParentRoute />
+        </RoleGuard>
       </ProtectedRoute>
     ),
   },
@@ -46,7 +53,9 @@ export const appRoutes: RouteObject[] = [
     path: '/coordinator',
     element: (
       <ProtectedRoute>
-        <CoordinatorRoute />
+        <RoleGuard allowedRole="Coordinator">
+          <CoordinatorRoute />
+        </RoleGuard>
       </ProtectedRoute>
     ),
   },
@@ -54,7 +63,9 @@ export const appRoutes: RouteObject[] = [
     path: '/it-admin',
     element: (
       <ProtectedRoute>
-        <ItAdminRoute />
+        <RoleGuard allowedRole="IT Admin">
+          <ItAdminRoute />
+        </RoleGuard>
       </ProtectedRoute>
     ),
   },
@@ -62,7 +73,9 @@ export const appRoutes: RouteObject[] = [
     path: '/principal',
     element: (
       <ProtectedRoute>
-        <PrincipalRoute />
+        <RoleGuard allowedRole="Principal">
+          <PrincipalRoute />
+        </RoleGuard>
       </ProtectedRoute>
     ),
   },

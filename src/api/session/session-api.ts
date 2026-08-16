@@ -4,6 +4,7 @@ export type SessionUser = {
   id: string
   uid: string
   email: string
+  name: string
   roleId: string | null
   role: string | null
 }

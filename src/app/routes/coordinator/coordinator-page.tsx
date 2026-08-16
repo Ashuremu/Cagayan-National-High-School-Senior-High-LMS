@@ -89,7 +89,7 @@ export const CoordinatorPage = () => {
       />
 
       <div className="student-main">
-        <RouteNavbar userName="Coordinator" />
+        <RouteNavbar />
         {activeSidebarItem === 'home' && (
           <SegmentTabs items={topTabs} activeTabId="dashboard" ariaLabel="Coordinator top tabs" />
         )}
