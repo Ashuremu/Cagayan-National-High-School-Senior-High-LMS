@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import SDO from '../../../assets/SDO.png'
-import { AppSidebar, CalendarCard, SegmentTabs, SubjectSidebarOptions } from '../../../components'
+import { AppSidebar, CalendarCard, SegmentTabs } from '../../../components'
 import { RouteNavbar } from '../navbar'
 import { ActiveActivitiesPage } from './active-activities'
+import { SubjectsPage } from './subjects'
 import { ToGradePage } from './to-grade'
 
 const sidebarItems = [
@@ -30,6 +31,7 @@ export const TeacherPage = () => {
   }
 
   const showHomeSubView = activeSidebarItem === 'home' && homeView !== 'dashboard'
+  const showSubjectsCalendar = showHomeSubView || activeSidebarItem === 'subjects'
 
   return (
     <div className="student-layout">
@@ -49,11 +51,11 @@ export const TeacherPage = () => {
 
         <main className="student-content">
           <section className="student-content__main">
-            {activeSidebarItem === 'subjects' ? <SubjectSidebarOptions /> : null}
-
-            {homeView === 'to-grade' && activeSidebarItem === 'home' ? (
+            {activeSidebarItem === 'subjects' ? (
+              <SubjectsPage />
+            ) : homeView === 'to-grade' ? (
               <ToGradePage />
-            ) : homeView === 'active-activities' && activeSidebarItem === 'home' ? (
+            ) : homeView === 'active-activities' ? (
               <ActiveActivitiesPage />
             ) : (
               <>
@@ -77,9 +79,9 @@ export const TeacherPage = () => {
           <aside className="student-content__side">
             <CalendarCard
               title="Calendar"
-              month={showHomeSubView ? 1 : undefined}
-              year={showHomeSubView ? 2026 : undefined}
-              activeDay={showHomeSubView ? 14 : undefined}
+              month={showSubjectsCalendar ? 1 : undefined}
+              year={showSubjectsCalendar ? 2026 : undefined}
+              activeDay={showSubjectsCalendar ? 14 : undefined}
             />
 
             <section className="student-info-card">
