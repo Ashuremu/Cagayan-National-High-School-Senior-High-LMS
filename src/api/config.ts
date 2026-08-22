@@ -9,6 +9,7 @@ export const API_ENDPOINTS = {
   logout: '/logout',
   roles: '/roles',
   users: '/users',
+  logs: '/logs',
 } as const
 
 export function apiUrl(path: string): string {
