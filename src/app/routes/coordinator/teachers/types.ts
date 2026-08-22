@@ -3,11 +3,12 @@ export type TeacherStatus = 'active' | 'low-engagement' | 'inactive'
 export type TeacherActivity = {
   id: string
   teacherName: string
-  lessons: number
-  activity: number
-  grade: number
+  email: string
+  lessons: number | null
+  activity: number | null
+  grade: number | null
   lastActivity: string
-  pendingGrades: number
+  pendingGrades: number | null
   status: TeacherStatus
 }
 

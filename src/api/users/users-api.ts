@@ -57,6 +57,14 @@ export type UsersListResult =
   | { ok: true; data: UsersListSuccess }
   | { ok: false; error: ApiError }
 
+export type TeachersListSuccess = {
+  teachers: ManageUserRecord[]
+}
+
+export type TeachersListResult =
+  | { ok: true; data: TeachersListSuccess }
+  | { ok: false; error: ApiError }
+
 export type UpdateUserResult =
   | { ok: true; data: CreateUserSuccess }
   | { ok: false; error: ApiError }
@@ -105,6 +113,31 @@ export async function fetchUsers(): Promise<UsersListResult> {
     }
 
     return { ok: true, data: body as UsersListSuccess }
+  } catch {
+    return {
+      ok: false,
+      error: { message: 'Cannot connect to backend API. Please try again.' },
+    }
+  }
+}
+
+export async function fetchTeachers(): Promise<TeachersListResult> {
+  try {
+    const response = await fetch(apiUrl(`${API_ENDPOINTS.users}/teachers`), {
+      method: 'GET',
+      ...defaultFetchOptions,
+    })
+
+    const body = await response.json()
+
+    if (!response.ok) {
+      return {
+        ok: false,
+        error: { message: body.message ?? 'Failed to load teachers.' },
+      }
+    }
+
+    return { ok: true, data: body as TeachersListSuccess }
   } catch {
     return {
       ok: false,

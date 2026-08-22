@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   ActivityOverviewTable,
   AppSidebar,
@@ -6,6 +6,8 @@ import {
   DashboardSummaryCards,
   SegmentTabs,
 } from '../../../components'
+import { fetchTeachers } from '../../../api/users/users-api'
+import type { ManageUserRecord } from '../../../api/users/users-api'
 import { RouteNavbar } from '../navbar'
 import { EnrollmentPage } from './enrollment'
 import { SubjectsPage } from './subjects'
@@ -21,32 +23,6 @@ const sidebarItems = [
 const topTabs = [
   { id: 'dashboard', label: 'Dashboard' },
   { id: 'news', label: 'News' },
-]
-
-const summaryCards = [
-  { label: 'Total Teachers', value: '75' },
-  { label: 'Total Students', value: '1,250' },
-  { label: 'Total Subjects', value: '45' },
-  { label: 'Pending Enrollments', value: '12' },
-]
-
-const activityRows = [
-  {
-    teacher: 'Prof. Park Santos',
-    lessonsUploaded: '15',
-    activitiesPosted: '15',
-    gradersPosted: '45',
-    status: 'Active',
-    action: 'VIEW',
-  },
-  {
-    teacher: 'Sarah Williams',
-    lessonsUploaded: '12',
-    activitiesPosted: '9',
-    gradersPosted: '20',
-    status: 'Active',
-    action: 'VIEW',
-  },
 ]
 
 const subjectAssignments = [
@@ -78,6 +54,42 @@ const enrollmentRequests = [
 
 export const CoordinatorPage = () => {
   const [activeSidebarItem, setActiveSidebarItem] = useState('home')
+  const [teachers, setTeachers] = useState<ManageUserRecord[]>([])
+
+  useEffect(() => {
+    let isMounted = true
+
+    void fetchTeachers().then((result) => {
+      if (!isMounted) return
+      if (result.ok) {
+        setTeachers(result.data.teachers)
+      }
+    })
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
+  const activityRows = useMemo(
+    () =>
+      teachers.map((teacher) => ({
+        teacher: teacher.name,
+        lessonsUploaded: '—',
+        activitiesPosted: '—',
+        gradersPosted: '—',
+        status: teacher.status,
+        action: 'VIEW',
+      })),
+    [teachers]
+  )
+
+  const summaryCards = [
+    { label: 'Total Teachers', value: String(teachers.length) },
+    { label: 'Total Students', value: '1,250' },
+    { label: 'Total Subjects', value: '45' },
+    { label: 'Pending Enrollments', value: '12' },
+  ]
 
   return (
     <div className="student-layout">
