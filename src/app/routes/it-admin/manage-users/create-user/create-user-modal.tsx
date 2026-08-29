@@ -32,20 +32,14 @@ export const CreateUserModal = ({ isOpen, onClose, onCreated }: CreateUserModalP
   const [form, setForm] = useState<CreateUserFormValues>(emptyForm)
   const [noSuffix, setNoSuffix] = useState(false)
   const [roleOptions, setRoleOptions] = useState<RoleOption[]>([])
-  const [isLoadingRoles, setIsLoadingRoles] = useState(false)
+  const [isLoadingRoles, setIsLoadingRoles] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
 
   useEffect(() => {
-    if (!isOpen) {
-      setForm(emptyForm)
-      setNoSuffix(false)
-      setErrorMessage('')
-      return
-    }
+    if (!isOpen) return
 
     let isMounted = true
-    setIsLoadingRoles(true)
 
     void fetchRoles().then((result) => {
       if (!isMounted) return
@@ -66,6 +60,13 @@ export const CreateUserModal = ({ isOpen, onClose, onCreated }: CreateUserModalP
     setForm((prev) => ({ ...prev, [field]: value }))
   }
 
+  const handleClose = () => {
+    setForm(emptyForm)
+    setNoSuffix(false)
+    setErrorMessage('')
+    onClose()
+  }
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setErrorMessage('')
@@ -84,13 +85,13 @@ export const CreateUserModal = ({ isOpen, onClose, onCreated }: CreateUserModalP
     }
 
     onCreated?.(result.data)
-    onClose()
+    handleClose()
   }
 
   return (
     <Modal
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={handleClose}
       size="xl"
       showCloseButton={false}
       className="create-user-modal"
@@ -98,7 +99,7 @@ export const CreateUserModal = ({ isOpen, onClose, onCreated }: CreateUserModalP
       <div className="create-user-modal__content">
         <button
           type="button"
-          onClick={onClose}
+          onClick={handleClose}
           className="create-user-modal__close"
           aria-label="Close create user modal"
         >
@@ -200,7 +201,7 @@ export const CreateUserModal = ({ isOpen, onClose, onCreated }: CreateUserModalP
             <button type="submit" className="create-user-modal__submit" disabled={isSubmitting}>
               {isSubmitting ? 'Creating...' : 'Submit'}
             </button>
-            <button type="button" className="create-user-modal__cancel" onClick={onClose}>
+            <button type="button" className="create-user-modal__cancel" onClick={handleClose}>
               Cancel
             </button>
           </div>

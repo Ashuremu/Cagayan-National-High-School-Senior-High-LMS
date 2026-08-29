@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from 'react'
+import { useState, type FormEvent } from 'react'
 import Modal from '../../../../../components/Modal'
 import {
   academicPeriodOptions,
@@ -32,11 +32,10 @@ const emptyForm: AssignTeacherFormValues = {
 export const AssignTeacherModal = ({ isOpen, onClose, onSubmit }: AssignTeacherModalProps) => {
   const [form, setForm] = useState<AssignTeacherFormValues>(emptyForm)
 
-  useEffect(() => {
-    if (!isOpen) {
-      setForm(emptyForm)
-    }
-  }, [isOpen])
+  const handleClose = () => {
+    setForm(emptyForm)
+    onClose()
+  }
 
   const updateField = <K extends keyof AssignTeacherFormValues>(
     field: K,
@@ -48,13 +47,13 @@ export const AssignTeacherModal = ({ isOpen, onClose, onSubmit }: AssignTeacherM
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     onSubmit?.(form)
-    onClose()
+    handleClose()
   }
 
   return (
     <Modal
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={handleClose}
       size="xl"
       showCloseButton={false}
       className="subjects-modal"
@@ -62,7 +61,7 @@ export const AssignTeacherModal = ({ isOpen, onClose, onSubmit }: AssignTeacherM
       <div className="subjects-modal__content">
         <button
           type="button"
-          onClick={onClose}
+          onClick={handleClose}
           className="subjects-modal__close"
           aria-label="Close assign teacher modal"
         >
@@ -218,7 +217,7 @@ export const AssignTeacherModal = ({ isOpen, onClose, onSubmit }: AssignTeacherM
             <button type="submit" className="subjects-modal__submit">
               Save
             </button>
-            <button type="button" className="subjects-modal__cancel" onClick={onClose}>
+            <button type="button" className="subjects-modal__cancel" onClick={handleClose}>
               Cancel
             </button>
           </div>

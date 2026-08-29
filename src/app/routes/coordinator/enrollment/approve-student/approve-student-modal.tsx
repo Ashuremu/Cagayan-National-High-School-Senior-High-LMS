@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from 'react'
+import { useState, type FormEvent } from 'react'
 import Modal from '../../../../../components/Modal'
 import { ReviewAccordion, TextField } from '../../../../../components'
 import { buildReviewSections } from '../add-student/build-review-sections'
@@ -49,18 +49,6 @@ export const ApproveStudentModal = ({
   const [selectedSubjects, setSelectedSubjects] = useState<Record<string, boolean>>(() =>
     Object.fromEntries(defaultSelectedSubjectIds.map((id) => [id, true]))
   )
-
-  useEffect(() => {
-    if (!isOpen) {
-      setStep('approve')
-      setSection(defaultSection)
-      setRemarks('')
-      setApprovedSummary(null)
-      setSelectedSubjects(
-        Object.fromEntries(defaultSelectedSubjectIds.map((id) => [id, true]))
-      )
-    }
-  }, [defaultSection, isOpen])
 
   const toggleSubject = (id: string, checked: boolean) => {
     setSelectedSubjects((current) => ({ ...current, [id]: checked }))

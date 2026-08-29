@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { DashboardSummaryCards } from '../../../../components'
 import {
   ACTIVITY_LOG_ACTIONS,
@@ -49,40 +49,47 @@ export const SystemPage = () => {
   const [itemsPerPage, setItemsPerPage] = useState(10)
   const [currentPage, setCurrentPage] = useState(1)
 
-  const loadLogs = useCallback(async () => {
-    setIsLoadingLogs(true)
-    setLogsError('')
+  useEffect(() => {
+    let isMounted = true
 
-    const result = await fetchActivityLogs({
+    void fetchActivityLogs({
       action: actionFilter,
       email: emailFilter,
       from: fromFilter || undefined,
       to: toFilter || undefined,
       page: currentPage,
       limit: itemsPerPage,
+    }).then((result) => {
+      if (!isMounted) return
+
+      if (!result.ok) {
+        setLogsError(result.error.message)
+        setLogs([])
+        setTotalLogs(0)
+        setTotalPages(1)
+        setIsLoadingLogs(false)
+        return
+      }
+
+      setLogs(result.data.logs.map(toSystemLogRow))
+      setTotalLogs(result.data.pagination.total)
+      setTotalPages(Math.max(1, result.data.pagination.totalPages))
+      setIsLoadingLogs(false)
     })
 
-    if (!result.ok) {
-      setLogsError(result.error.message)
-      setLogs([])
-      setTotalLogs(0)
-      setTotalPages(1)
-      setIsLoadingLogs(false)
-      return
+    return () => {
+      isMounted = false
     }
-
-    setLogs(result.data.logs.map(toSystemLogRow))
-    setTotalLogs(result.data.pagination.total)
-    setTotalPages(Math.max(1, result.data.pagination.totalPages))
-    setIsLoadingLogs(false)
   }, [actionFilter, emailFilter, fromFilter, toFilter, currentPage, itemsPerPage])
 
-  useEffect(() => {
-    void loadLogs()
-  }, [loadLogs])
+  const beginLogsLoad = () => {
+    setIsLoadingLogs(true)
+    setLogsError('')
+  }
 
   const handleFilterChange = (setter: (value: string) => void) => {
     return (value: string) => {
+      beginLogsLoad()
       setter(value)
       setCurrentPage(1)
     }
@@ -132,7 +139,10 @@ export const SystemPage = () => {
               aria-label="Search logs by email"
               onChange={(event) => setEmailFilter(event.target.value)}
               onKeyDown={(event) => {
-                if (event.key === 'Enter') setCurrentPage(1)
+                if (event.key === 'Enter') {
+                  beginLogsLoad()
+                  setCurrentPage(1)
+                }
               }}
             />
           </label>
@@ -208,6 +218,7 @@ export const SystemPage = () => {
               value={String(itemsPerPage)}
               aria-label="Items per page"
               onChange={(event) => {
+                beginLogsLoad()
                 setItemsPerPage(Number(event.target.value))
                 setCurrentPage(1)
               }}
@@ -221,7 +232,10 @@ export const SystemPage = () => {
           <button
             type="button"
             disabled={currentPage <= 1 || isLoadingLogs}
-            onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
+            onClick={() => {
+              beginLogsLoad()
+              setCurrentPage((page) => Math.max(1, page - 1))
+            }}
           >
             Prev
           </button>
@@ -231,7 +245,10 @@ export const SystemPage = () => {
             <select
               value={String(currentPage)}
               aria-label="Current page"
-              onChange={(event) => setCurrentPage(Number(event.target.value))}
+              onChange={(event) => {
+                beginLogsLoad()
+                setCurrentPage(Number(event.target.value))
+              }}
             >
               {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
                 <option key={page} value={page}>
@@ -245,7 +262,10 @@ export const SystemPage = () => {
           <button
             type="button"
             disabled={currentPage >= totalPages || isLoadingLogs}
-            onClick={() => setCurrentPage((page) => Math.min(totalPages, page + 1))}
+            onClick={() => {
+              beginLogsLoad()
+              setCurrentPage((page) => Math.min(totalPages, page + 1))
+            }}
           >
             Next
           </button>

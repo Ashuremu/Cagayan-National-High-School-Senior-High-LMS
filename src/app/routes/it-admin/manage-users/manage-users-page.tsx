@@ -244,11 +244,13 @@ export const ManageUsersPage = () => {
         </section>
       </section>
 
-      <CreateUserModal
-        isOpen={isCreateUserOpen}
-        onClose={() => setIsCreateUserOpen(false)}
-        onCreated={handleUserCreated}
-      />
+      {isCreateUserOpen && (
+        <CreateUserModal
+          isOpen
+          onClose={() => setIsCreateUserOpen(false)}
+          onCreated={handleUserCreated}
+        />
+      )}
 
       <EditUserModal
         key={editingUser ? `open-${editingUser.id}` : 'closed'}

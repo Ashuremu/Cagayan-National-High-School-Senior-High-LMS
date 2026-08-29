@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from 'react'
+import { useState, type FormEvent } from 'react'
 import Modal from '../../../../../components/Modal'
 import {
   academicPeriodOptions,
@@ -14,6 +14,13 @@ import type { TeacherAssignment, UpdateAssignmentFormValues } from '../types'
 type UpdateTeacherAssignmentModalProps = {
   isOpen: boolean
   assignment: TeacherAssignment | null
+  onClose: () => void
+  onSubmit?: (assignmentId: string, values: UpdateAssignmentFormValues) => void
+}
+
+type UpdateAssignmentFormProps = {
+  isOpen: boolean
+  assignment: TeacherAssignment
   onClose: () => void
   onSubmit?: (assignmentId: string, values: UpdateAssignmentFormValues) => void
 }
@@ -34,25 +41,36 @@ export const UpdateTeacherAssignmentModal = ({
   onClose,
   onSubmit,
 }: UpdateTeacherAssignmentModalProps) => {
-  const [form, setForm] = useState<UpdateAssignmentFormValues | null>(null)
-
-  useEffect(() => {
-    if (isOpen && assignment) {
-      setForm(buildFormFromAssignment(assignment))
-    } else if (!isOpen) {
-      setForm(null)
-    }
-  }, [isOpen, assignment])
-
-  if (!isOpen || !assignment || !form) {
+  if (!isOpen || !assignment) {
     return null
   }
+
+  return (
+    <UpdateAssignmentForm
+      key={assignment.id}
+      isOpen={isOpen}
+      assignment={assignment}
+      onClose={onClose}
+      onSubmit={onSubmit}
+    />
+  )
+}
+
+const UpdateAssignmentForm = ({
+  isOpen,
+  assignment,
+  onClose,
+  onSubmit,
+}: UpdateAssignmentFormProps) => {
+  const [form, setForm] = useState<UpdateAssignmentFormValues>(() =>
+    buildFormFromAssignment(assignment)
+  )
 
   const updateField = <K extends keyof UpdateAssignmentFormValues>(
     field: K,
     value: UpdateAssignmentFormValues[K]
   ) => {
-    setForm((prev) => (prev ? { ...prev, [field]: value } : prev))
+    setForm((prev) => ({ ...prev, [field]: value }))
   }
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {

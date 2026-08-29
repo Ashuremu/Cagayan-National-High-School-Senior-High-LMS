@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type FormEvent } from 'react'
+import { useRef, useState, type FormEvent } from 'react'
 import Modal from '../../../../../components/Modal'
 import { AddStudentStepOne } from './add-student-step-one'
 import { AddStudentStepFour } from './add-student-step-four'
@@ -148,22 +148,20 @@ export const AddStudentModal = ({
   const stepOneRef = useRef<HTMLDivElement>(null)
   const stepTwoRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    if (!isOpen) {
-      setForm(emptyForm())
-      setStep(1)
-      setSubmittedEnrollment(null)
-    }
-  }, [isOpen])
+  const handleClose = () => {
+    setForm(emptyForm())
+    setStep(1)
+    setSubmittedEnrollment(null)
+    onClose()
+  }
 
-  useEffect(() => {
-    if (form.sameAsCurrentAddress) {
-      setForm((prev) => ({
-        ...prev,
-        permanentAddress: { ...prev.currentAddress },
-      }))
-    }
-  }, [form.sameAsCurrentAddress, form.currentAddress])
+  const handleSameAsCurrentChange = (checked: boolean) => {
+    setForm((prev) => ({
+      ...prev,
+      sameAsCurrentAddress: checked,
+      permanentAddress: checked ? { ...prev.currentAddress } : prev.permanentAddress,
+    }))
+  }
 
   const updateField = <K extends keyof AddStudentFormValues>(
     field: K,
@@ -301,14 +299,14 @@ export const AddStudentModal = ({
   }
 
   const handleSuccessClose = () => {
-    onClose()
+    handleClose()
   }
 
   const handleAssignSubjects = () => {
     if (submittedEnrollment) {
       onAssignSubjects?.(submittedEnrollment)
     }
-    onClose()
+    handleClose()
   }
 
   const handlePrevious = () => {
@@ -325,7 +323,7 @@ export const AddStudentModal = ({
   return (
     <Modal
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={handleClose}
       size="xl"
       showCloseButton={false}
       className={`add-student-modal ${isSuccessStep ? 'add-student-modal--success' : ''}`}
@@ -333,7 +331,7 @@ export const AddStudentModal = ({
       <div className="add-student-modal__content">
         <button
           type="button"
-          onClick={isSuccessStep ? handleSuccessClose : onClose}
+          onClick={handleClose}
           className="add-student-modal__close"
           aria-label="Close add student modal"
         >
@@ -368,6 +366,7 @@ export const AddStudentModal = ({
                 updateField={updateField}
                 updateCurrentAddress={updateCurrentAddress}
                 updatePermanentAddress={updatePermanentAddress}
+                onSameAsCurrentChange={handleSameAsCurrentChange}
               />
             </div>
           )}

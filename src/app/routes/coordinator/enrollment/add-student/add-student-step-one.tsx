@@ -26,6 +26,7 @@ type AddStudentStepOneProps = {
   ) => void
   updateCurrentAddress: (field: AddressFieldKey, value: string) => void
   updatePermanentAddress: (field: AddressFieldKey, value: string) => void
+  onSameAsCurrentChange: (checked: boolean) => void
 }
 
 export const AddStudentStepOne = ({
@@ -33,6 +34,7 @@ export const AddStudentStepOne = ({
   updateField,
   updateCurrentAddress,
   updatePermanentAddress,
+  onSameAsCurrentChange,
 }: AddStudentStepOneProps) => (
   <>
     <div className="add-student-modal__grid add-student-modal__grid--2">
@@ -182,7 +184,7 @@ export const AddStudentStepOne = ({
       onChange={updatePermanentAddress}
       showSameCheckbox
       sameAsCurrent={form.sameAsCurrentAddress}
-      onSameAsCurrentChange={(checked) => updateField('sameAsCurrentAddress', checked)}
+      onSameAsCurrentChange={onSameAsCurrentChange}
     />
 
     <fieldset className="add-student-modal__section">
